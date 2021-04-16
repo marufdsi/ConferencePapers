@@ -217,6 +217,20 @@ P\ =\ Base\_Clock\_Frequency\times Vector\_Width\times \frac{FLOPs}{Instruction}
 
 \subsection{Random 2D-SpMV}
 \subsubsection{CSR}
+\begin{table}[htb]
+\caption{CSR SpMV Property.}
+\label{tab:csr-spmv-property}
+\centering
+\begin{tabular}[c]{| l | c | c | c |}
+\hline
+Array & Elements Size & Data Types & Access Type \\ \hline
+rowA & 2$\times$ppn$\times$rpp & 4 bytes & Sequential \\ \hline
+colA & ppn$\times$nnz & 4 bytes & Sequential \\ \hline
+valA & ppn$\times$nnz & 4/8 bytes & Sequential \\ \hline
+x & ppn$\times$nnz & 4/8 bytes & Random \\ \hline
+y & ppn$\times$rpp & 4/8 bytes & Sequential \\ \hline
+\end{tabular}
+\end{table}
 
 \begin{table}[htb]
 \caption{SpMV on Random 2D Partitioning(Single Precision).}
