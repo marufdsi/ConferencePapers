@@ -274,7 +274,7 @@ Matrices & Nodes & nProcesses & Actual Time & Predicted Time & Error\% \\ \hline
 \end{comment}
 
 \begin{table}[htb]
-\caption{Overall SpMV on Random 2D Partitioning(Single Precision on Skylake).}
+\caption{Overall SpMV on Random 2D Partitioning(on Skylake).}
 \label{tab:overall-spmv-2d-single}
 \centering
 \begin{tabular}[c]{| l | c | c | c | c | c |}
@@ -313,36 +313,49 @@ Matrices & Nodes & nProcesses & Actual Time & Predicted Time & Error\% \\ \hline
 \end{table}
 
 
-\begin{comment}
 \subsection{Global 1D-SpMV}
 \subsubsection{CSR}
 \begin{table}[htb]
-\caption{SpMV on Global 1D-Row Partitioning(Single Precision).}
-\label{tab:spmv-gk-single}
+\caption{Overall SpMV on Global 1D-Row Partitioning(on Skylake).}
+\label{tab:overall-spmv-gk-single}
 \centering
 \begin{tabular}[c]{| l | c | c | c | c | c |}
 \hline
-Matrices & Nodes & nProcesses & Actual Time & Predicted Time & Error \\ \hline
-rhugetrace-00010 & 4 & 144 & 0.835 & 1.034 & 23.92\% \\ \hline
-hugetrace-00010 & 5 & 169 & 0.682 & 0.768 & 12.47\% \\ \hline
-nlpkkt160 & 4 & 144 & 2.728 & 5.167 & 89.42\% \\ \hline
-nlpkkt160 & 5 & 169 & 2.189 & 4.323 & 97.54\% \\ \hline
-nlpkkt160 & 7 & 225 & 1.595 & 3.201 & 100.7\% \\ \hline
-nlpkkt160 & 8 & 256 & 1.427 & 2.793 & 95.7\% \\ \hline
-nlpkkt200 & 4 & 144 & 5.163 & 10.144 & 96.47\% \\ \hline
-nlpkkt200 & 5 & 169 & 4.301 & 8.629 & 100.6\% \\ \hline
-nlpkkt200 & 7 & 225 & 3.112 & 6.434 & 106.8\% \\ \hline
-nlpkkt200 & 8 & 256 & 2.679 & 5.661 & 111.3\% \\ \hline
-nlpkkt240 & 4 & 144 & 8.711 & 17.648 & 102.6\% \\ \hline
-nlpkkt240 & 5 & 169 & 7.389 & 15.014 & 103.2\% \\ \hline
-nlpkkt240 & 7 & 225 & 5.363 & 11.235 & 109.5\% \\ \hline
-nlpkkt240 & 8 & 256 & 4.524 & 9.871 & 118.2\% \\ \hline
-road\_central & 4 & 144 & 0.961 & 0.976 & 1.572\% \\ \hline
-road\_central & 5 & 169 & 0.850 & 0.769 & 9.569\% \\ \hline
+\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
+  &  &  & Actual & Predicted &  \\ \hline
+\multirow{4}{*}{333SP}  &  4  &  144  &  2.6E-02  &  2.1E-02  &  19.2\% \\ \cline{2-6}
+  &  5  &  169  &  2.0E-02  &  2.0E-02  &  2.2\% \\ \cline{2-6}
+  &  7  &  225  &  1.9E-02  &  1.8E-02  &  5.6\% \\ \cline{2-6}
+  &  8  &  256  &  2.4E-02  &  1.9E-02  &  21.2\% \\ \hline
+\multirow{4}{*}{AS365}  &  4  &  144  &  2.7E-02  &  2.2E-02  &  19.2\% \\ \cline{2-6}
+  &  5  &  169  &  2.1E-02  &  2.0E-02  &  2.7\% \\ \cline{2-6}
+  &  7  &  225  &  2.0E-02  &  1.9E-02  &  4.8\% \\ \cline{2-6}
+  &  8  &  256  &  2.4E-02  &  1.9E-02  &  21.3\% \\ \hline
+\multirow{4}{*}{M6}   &  4  &  144  &  2.5E-02  &  2.0E-02  &  19.2\% \\ \cline{2-6}
+  &  5  &  169  &  1.9E-02  &  1.8E-02  &  3.2\% \\ \cline{2-6}
+  &  7  &  225  &  1.8E-02  &  1.7E-02  &  4.5\% \\ \cline{2-6}
+  &  8  &  256  &  2.2E-02  &  1.8E-02  &  21.1\% \\ \hline
+\multirow{4}{*}{NLR}  &  4  &  144  &  2.9E-02  &  2.4E-02  &  19.2\% \\ \cline{2-6}
+  &  5  &  169  &  2.2E-02  &  2.2E-02  &  2.3\% \\ \cline{2-6}
+  &  7  &  225  &  2.1E-02  &  2.1E-02  &  4.1\% \\ \cline{2-6}
+  &  8  &  256  &  2.6E-02  &  2.1E-02  &  21.3\% \\ \hline
+\multirow{4}{*}{hugetrace-00010}  &  4  &  144  &  8.2E-02  &  6.6E-02  &  20.0\% \\ \cline{2-6}
+  &  5  &  169  &  6.2E-02  &  6.1E-02  &  0.7\% \\ \cline{2-6}
+  &  7  &  225  &  6.4E-02  &  5.7E-02  &  10.2\% \\ \cline{2-6}
+  &  8  &  256  &  7.3E-02  &  5.7E-02  &  22.7\% \\ \hline
+\multirow{4}{*}{road\_central} &  4  &  144  &  9.6E-02  &  7.6E-02  &  20.2\% \\ \cline{2-6}
+\  &  5  &  169  &  7.1E-02  &  7.1E-02  &  0.5\% \\ \cline{2-6}
+  &  7  &  225  &  7.4E-02  &  6.6E-02  &  10.3\% \\ \cline{2-6}
+  &  8  &  256  &  8.6E-02  &  6.6E-02  &  23.4\% \\ \hline
+\multirow{4}{*}{road\_usa}   &  4  &  144  &  1.6E-01  &  1.3E-01  &  19.3\% \\ \cline{2-6}
+  &  5  &  169  &  9.9E-02  &  1.2E-01  &  23.8\% \\ \cline{2-6}
+  &  7  &  225  &  9.8E-02  &  1.1E-01  &  16.5\% \\ \cline{2-6}
+  &  8  &  256  &  1.5E-01  &  1.1E-01  &  23.1\% \\ \hline
+
 
 \end{tabular}
 \end{table}
-\end{comment}
+
 
 \bibliographystyle{unsrt}
 \bibliography{spmv}
