@@ -116,6 +116,92 @@ for SpMV operations on the distributed system for these different
 techniques. The models are accurate enough to predict the best
 configuration to execute SpMV given a matrix.
 
+\section{Related Work}
+Lots of different performance model for the \textit{SpMV}  exist. In particular, Guo and Wang \textit{et.al.}~\cite{guo2013performance} presented a 
+performance model for the general purpose GPU. They provide a linear model that can predict the performance of the matrix based on the 
+matrix strides size and nonzero per row. Guo \textit{et.at.}~\cite{guo2018performance} also provide a \textit{SVM} machine learning 
+model for the GPU. 
+
+\section{SpMV on Distributed Systems}
+In \textit{2D-Uniform partitioning},  matrices
+are partitioned into both row-wise and column-wise.  There is a choice
+in the number of column partitions and row partitions. However, for
+iterated SpMV applications, it is common practice to pick a symmetric
+partitioning scheme and a number of processors that is a perfect
+square. Each MPI process handles one of the portions of the matrix.
+Load imbalance is a common issue in 2D partitioning. Many matrices
+tend to have a band structure that tends to build very imbalanced
+partitioning.  2D-Uniform partitioning can balance the number of rows
+and columns but can have a significant load imbalance in the number
+of non-zeros in the blocks.
+
+Boman and Devine et al.~\cite{boman2013scalable} noted that
+randomizing the order of the matrix can provide good load balance for
+SpMV in 2D-Uniform partitioning and is used in scientific
+applications~\cite{dytrych2016efficacy}. We adopt this strategy for
+our 2D uniform partitioning technique. Each row (and corresponding
+vector entry) is assigned to a random process.  Since the expected
+number of rows and non-zeros is uniform for all processes, this method
+generally achieves a good load balance.
+
+If $P=p^2$ is the number of processes
+and $matrix\_size$ is the size of the matrix then each processor
+should contain the same
+number$\Bigl\lceil\dfrac{matrix\_size}{p}\Bigr\rceil$ of rows and
+columns. The last block can be padded with zeros to make blocks of the name size.
+
+With 2D-Uniform partitioning, the execution of the iterated SpMV is
+done using the classic methods. Each process performs its local
+multiplication. The values are then reduced within each row onto the
+diagonal process. These reduced values are then broadcast along with the
+column processes for the next iteration of the calculation.
+
+In \textit{1D-Row Partitioning}, matrices are split into row-wise
+only. Balancing the load between the processors and minimizing the
+communication boils down to solving a K-way graph partitioning
+problem~\cite{kaya2013analysis}.  We can define the ID-Row(K-way)
+partitioning for a graph $G=(V,E)$ with $|V|=n$, partition $V$ into
+$k$ subsets, $V_1, V_2, \dots, V_k$ such that $V_i \cap V_j=\phi$ for
+$i\neq j$, $|V_i| = n/k$, and $\cup_i V_i = V$, and the number of
+edges of $E$ whose incident vertices belong to different subsets is
+minimized. Each partition will allocate to a different MPI
+process. We base the 1D row partitioning technique that we will model
+on this strategy and we choose the METIS graph partitioning
+tool~\cite{karypis1995multilevel} to provide the precise row
+partitioning.
+
+In 1D-Row partitioning, one process contains small portions of rows
+and their corresponding columns. To perform SpMV on the 1D-Row
+partitioning, a processor can hold either the portion of the \textbf{vector
+  elements} corresponding to their row elements or the full vector.
+We call the strategy where the process holds the entire vector \textit{Global
+  1D-Row SpMV}(G1DR-SpMV). In this strategy, all MPI processes
+perform matrix multiplication locally on the part of the matrix that
+belongs to them. After matrix multiplication, an ALL$\_$Gatherv takes
+place to share the updated value of the vector.
+
+We call the strategy where a process only holds the portion of the
+vector that it needs \textit{Local 1D-Row SpMV}(L1DR-SpMV).  In this
+algorithm, initially, a process performs local matrix multiplication
+on the non zero elements whose column belong to the local vector.  For
+the rest of the non zero elements whose vector elements belong to the
+other processes, it retrieves the relevant part of the vector using
+communication tailored to each process using standard MPI point to
+point communication primitives.
+
+The METIS K-way partitioning technique minimizes the communications
+performed by the Local 1D-Row SpMV. Therefore if METIS can partition
+the graph well, one would expect the Local 1D-Row to perform very few
+communications. However, if the partitioning is not good, the custom
+message strategy only saves few communications and the Global 1D-Row
+SpMV would benefit from the effectiveness of MPI Collectives. There is
+no point in designing a local 2D scheme since the randomized
+partitioning ensures there is little saving to be expected from
+customized communications.
+
+The local matrix stored by the nodes can be represented in a number of
+formats. We picked the two most popular formats: CSR and COO.
+
 
 \section{\todo{SpMV on AVX-512 Architecture (Skylake)}}
 SpMV on the distributed system initially can be divided into two parts, 
