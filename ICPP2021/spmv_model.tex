@@ -393,6 +393,48 @@ Matrices & Nodes & nProcesses & Actual Time & Predicted Time & Error\% \\ \hline
 \end{tabular}
 \end{table}
 
+
+\subsubsection{COO}
+\begin{table}[htb]
+\caption{Overall SpMV on Local COO 1D-Row Partitioning(on Skylake).}
+\label{tab:overall-spmv-coo-lk-single}
+\centering
+\begin{tabular}[c]{| l | c | c | c | c | c |}
+\hline
+\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
+  &  &  & Actual & Predicted &  \\ \hline
+\multirow{4}{*}{333SP}  &  4  &  144  &  1.2E-03  &  1.1E-03  &  8.6\% \\ \cline{2-6}
+ &  5  &  169  &  1.1E-03  &  9.6E-04  &  11.8\% \\ \cline{2-6}
+ &  7  &  225  &  8.9E-04  &  8.2E-04  &  8.7\% \\ \cline{2-6}
+ &  8  &  256  &  8.2E-04  &  7.8E-04  &  5.6\% \\ \hline
+\multirow{4}{*}{AS365}  &  4  &  144  &  1.4E-03  &  1.2E-03  &  11.0\% \\ \cline{2-6}
+ &  5  &  169  &  1.2E-03  &  1.1E-03  &  7.0\% \\ \cline{2-6}
+ &  7  &  225  &  9.3E-04  &  9.1E-04  &  2.4\% \\ \cline{2-6}
+ &  8  &  256  &  8.5E-04  &  8.7E-04  &  2.9\% \\ \hline
+\multirow{4}{*}{M6}  &  4  &  144  &  1.3E-03  &  1.2E-03  &  6.9\% \\ \cline{2-6}
+ &  5  &  169  &  1.1E-03  &  1.0E-03  &  8.9\% \\ \cline{2-6}
+ &  7  &  225  &  9.1E-04  &  8.7E-04  &  4.5\% \\ \cline{2-6}
+ &  8  &  256  &  8.2E-04  &  8.5E-04  &  2.7\% \\ \hline
+\multirow{4}{*}{NLR}  &  4  &  144  &  1.4E-03  &  1.3E-03  &  7.8\% \\ \cline{2-6}
+ &  5  &  169  &  1.3E-03  &  1.1E-03  &  12.1\% \\ \cline{2-6}
+ &  7  &  225  &  1.0E-03  &  9.6E-04  &  5.7\% \\ \cline{2-6}
+ &  8  &  256  &  9.6E-04  &  9.2E-04  &  4.4\% \\ \cline{2-6}
+\multirow{4}{*}{hugetrace-00010}  &  4  &  144  &  2.5E-03  &  2.2E-03  &  12.3\% \\ \cline{2-6}
+ &  5  &  169  &  2.2E-03  &  2.0E-03  &  8.4\% \\ \cline{2-6}
+ &  7  &  225  &  1.8E-03  &  1.6E-03  &  6.3\% \\ \cline{2-6}
+ &  8  &  256  &  1.6E-03  &  1.5E-03  &  5.1\% \\ \hline
+\multirow{4}{*}{road\_central}  &  4  &  144  &  2.5E-03  &  2.1E-03  &  13.0\% \\ \cline{2-6}
+ &  5  &  169  &  2.1E-03  &  1.9E-03  &  9.5\% \\ \cline{2-6}
+ &  7  &  225  &  1.7E-03  &  1.6E-03  &  7.2\% \\ \cline{2-6}
+ &  8  &  256  &  1.6E-03  &  1.5E-03  &  9.2\% \\ \hline
+\multirow{4}{*}{road\_usa}  &  4  &  144  &  3.8E-03  &  2.9E-03  &  22.9\% \\ \cline{2-6}
+ &  5  &  169  &  3.2E-03  &  2.6E-03  &  18.1\% \\ \cline{2-6}
+ &  7  &  225  &  2.6E-03  &  2.2E-03  &  12.2\% \\ \cline{2-6}
+ &  8  &  256  &  2.4E-03  &  2.1E-03  &  11.6\% \\ \hline
+\end{tabular}
+\end{table}
+
+
 \subsection{Global 1D-SpMV}
 \subsubsection{CSR}
 \begin{table}[htb]
