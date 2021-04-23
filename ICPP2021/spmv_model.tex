@@ -133,23 +133,17 @@ cases.
 We conclude by discussing the applicability of the different models in
 practice.
 
-\section{Related Work}
+\section{Sparse Matrix Vector Multiplication}
 
-There have been lots of previous work have done on the \textit{SpMV}
-performance model for the \textit{CPU} and \textit{GPU}
-architecture. In particular, Guo and Wang~\cite{guo2013performance}
-\textit{et.al.} have proposed a linear model for the general-purpose
-\textit{GPU} that can predict the runtime of the \textit{SpMV} based
-on the strides size and nonzero per row. There are also some other
-\textit{SpMV} models~\cite{nisa2018effective,guo2018performance} that
-exist for the \textit{GPU} architectures. A performance model for
-\textit{SpMV} on the \textit{GPU} architectures is more common than a
-single or distributed system of \textit{CPU} architectures. Consistent
-and parallelisms of the \textit{GPU} performance is the main reason
-behind this.
-model for the GPU. 
+\subsection{Representation formats}
 
-\section{SpMV on Distributed Systems}
+There are many representation format designed to store matrices for
+computing SpMV.
+
+Yet
+
+\subsection{Distributed memory exection}
+
 In \textit{2D-Uniform partitioning},  matrices
 are partitioned into both row-wise and column-wise.  There is a choice
 in the number of column partitions and row partitions. However, for
@@ -228,6 +222,23 @@ customized communications.
 
 The local matrix stored by the nodes can be represented in a number of
 formats. We picked the two most popular formats: CSR and COO.
+
+\subsection{Modeling performance}
+
+There have been lots of previous work have done on the \textit{SpMV}
+performance model for the \textit{CPU} and \textit{GPU}
+architecture. In particular, Guo and Wang~\cite{guo2013performance}
+\textit{et.al.} have proposed a linear model for the general-purpose
+\textit{GPU} that can predict the runtime of the \textit{SpMV} based
+on the strides size and nonzero per row. There are also some other
+\textit{SpMV} models~\cite{nisa2018effective,guo2018performance} that
+exist for the \textit{GPU} architectures. A performance model for
+\textit{SpMV} on the \textit{GPU} architectures is more common than a
+single or distributed system of \textit{CPU} architectures. Consistent
+and parallelisms of the \textit{GPU} performance is the main reason
+behind this.
+model for the GPU. 
+
 
 \section{Performance Model}
 We build up three different SpMV models and investigate their performance on different algorithms and
