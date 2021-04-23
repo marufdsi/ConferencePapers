@@ -106,25 +106,32 @@ decisions. These models could also be used to better understand the
 structure of the performance of SpMV based application across a wide
 range of graph and computing platform.
 
-In this paper, we propose a linear and polynomial \textit{Support
-  Vector Regression}(\textit{SVR})~\cite{awad2015support} model to predict and analyze the
-run time of \textit{SpMV} on the distributed system for different ways
-to execute the operation. Our system will analyze the predicted run
-time and return the best possible algorithm for the system. The
-performance of the \textit{SpMV} mainly depends on the size and
-structure of the matrices and the architecture of the system. 
+In this paper, we study the modeling of performance of iterated SpMV
+on distributed memory platform using MPI. We are not concerned with
+achieving the highest performance, but rather modeling accurately the
+performance of different configurations. We consider two classic
+representation of sparse matrices, namely CSR and COO
+representations. And we consider three distributed memory execution
+model: 1D partitioning with global communication, and with custom
+communications, and 2d partitioning with collective communications.
 
-%%%%%%%%% How %%%%%%%%
+We adapt existing linear and polynomial \textit{Support Vector
+  Regression}(\textit{SVR})~\cite{awad2015support} model first
+proposed for GPUs to predict and analyze the run time of \textit{SpMV}
+on distributed memory system. We also propose a model built from the
+ground up from micro-benchmarks of the architectures.
 
-%%%%%%%%% What %%%%%%%%
-In this paper, we explore two partitioning modes (Uniform
-2D-Partitioning and 1D Row Partitioning) and the performance of the
-different \textit{SpMV} representation based on these partitioning
-mechanisms on distributed systems. We develop a linear and a
-polynomial support vector regression (\textit{SVR}) performance models
-for SpMV operations on the distributed system for these different
-techniques. The models are accurate enough to predict the best
-configuration to execute SpMV given a matrix.
+We test the quality of the models of the execution of SpMV of seven
+real world matrices and of randomly generated matrices on MPI clusters
+up to 8 physical nodes (256 cores). The experiments show that the best
+configuration of the execution of SpMV depend on the matrix. The
+performance models usually have less than 10\% error in the predicted
+runtime. That runtime prediction accuracy is enough to predict
+accurately the configuration will lead to the best performance in most
+cases.
+
+We conclude by discussing the applicability of the different models in
+practice.
 
 \section{Related Work}
 
