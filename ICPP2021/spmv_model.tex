@@ -249,117 +249,6 @@ storage formats.
 \item Linear Model.
 \end{enumerate} 
 
-\subsection{SpMV Model from Micro-Benchmark}
-In this model, we predict the runtime of the SPMV based the performance of couple of micro-benchmark of 
-a selected computer architecture. Initially, SpMV on the distributed system can be divided into two main parts,
-\begin{itemize}
-\item Core Calculation: performance of the matrix-vector calculation in a MPI node.
-\item MPI Communication: communication runtime among MPI ranks(processes). 
-\end{itemize}
-\subsubsection{Core Calculation}
-We can represent the basic SpMV by $y=y+Val*x$, which requires two floating point operation(multiply and addition). 
-So, we can say we need to calculate NNZ(number of non-zeros) times FMA(fused multiply addition) to perform SpMV.
-But, first it needs to load the data and SpMV is bound by the memory bandwidth rather than instruction. So, we 
-separated the \textit{core calculation} into,
-\begin{itemize}
-\item Run time for FMA: $L_{FMA}\times NNZ$, where $L_{FMA}$ is the latency of a single FMA and $NNZ$ is number of non-zeros.
-\item Memory access latency: $L_{RW}$
-\end{itemize} 
-
-\paragraph{Micro Benchmark for \textit{FMA}}
-The throughput of SkylakeX is 2 instructions per cycle and the latency of FMA is 4 cycles. So there is a potential 
-of pipelinling($2\times 4 = 8$) to get the optimal results. Now, SkylakeX 
-has 512-bit register that can give the ability of the vectorization. For 64-bits floating point operation it can give vector 
-width 8 and for 32-bits it can give at max vector width 16. To find the peak performance of the FMA and to avoid the 
-read-write latency we need to setup the benchmark that datasets can be contained in the register. Now, SkylakeX has 32 
-registers. We can populate the pipeline by using sufficient ampunt of work. By varying the 
-number of fused-multiply-addition calculation, we can find out the performance limitation. From the information of the 
-processors, we can say that 4 cycles required for \textit{FMA} and the throughput of the FMA is 2 instruction per cycle, that means 
-we should at least use $4\times 2=8$ instruction at a time to populate the pipeline.
-\begin{figure}[hbt!]
-	\centering
-	\subfigure[Vector Width: 4]{\includegraphics[width=0.48\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_4.pdf}		\label{fig:mpi-skl-vec-4}}
-	\subfigure[Vector Width: 8]{\includegraphics[width=0.48\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_8.pdf}		\label{fig:mpi-skl-vec-8}}
-	\caption{Skylake: (MPI)Roofline model for bandwidth for FMA operation}
-	\label{fig:mpi-skl-fma}
-\end{figure}
-Figure~\ref{fig:mpi-skl-fma} shows the roofline model of the \textit{FMA} on SkylakeX processor. 
-We can estimate the theoritical peak performance a single FMA by the following equation,
-\begin{eqnarray*}
-P\ =\ Base\_Clock\_Frequency\times Vector\_Width\times \frac{FLOPs}{Instruction}
-\end{eqnarray*}
-The significance of the \textit{FMA} 
-latency is very few compare to the memory access latency. 
-
-\paragraph{Micro-Benchmark for Memory Access Latency}
-We explore the \textit{STREAM}~\cite{mccalpin1995stream} benchmark to find out the bandwidth of the memory access for a selected architecture.
-\begin{figure}[hbt!]
-	\centering
-	\subfigure[Single Precision.]{\includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_single_precision.pdf}		\label{fig:stream-single-copy}}
-	\subfigure[Double Precision.]{\includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_double_precision.pdf}		\label{fig:stream-double-copy}}
-	\caption{Single and double precision memory access bandwidth on Skylake processor.}
-	\label{fig:stream-copy-bandwidth}
-\end{figure}
-Figure~\ref{fig:stream-copy-bandwidth} shows the relation between data size and bandwidth of the SkylakeX processor. 
-To pick the right bandwidth for a matrix-vector multiplication, we first calculate the size of the data. Based on the size 
-of the data, we pick the average of the available immediate lower and higher point of the benchmark. Now, memory can 
-be accessed sequentially or random. To calculate the sequential and random access data, we build another micro-benchmark(Cache-Pattern). 
-Next, we will discuss about Cache-Pattern benchmark.
- 
-\paragraph{Cache-Pattern Micro-Benchmark}
-In SpMV some array or vector traverse incrementally and some irregular pattern. All the incremental or regular data accesses are treated as 
-\textit{Sequential} data. So, we do not need any extra work to handle them. Now, it is not guaranty that all the irregular access pattern data 
-are fully random access. There is possibility chunks of data in the middle of the array are sequential. The main aim of this benchmark is to 
-separate a irregular access array into sequential and random access data. This benchmark walk through a array and calculate the cache miss 
-and hit based on the \textit{least recently used}(LRU) memory. all the \textit{hits} added to the sequential data and \textit{miss} points are 
-added to the random access data.
-\begin{table}[htb]
-\caption{Memory Access Property for 2D-Partitioning SpMV Model(RPP=rows per process, NNZ=non-zero elements).}
-\label{tab:csr-spmv-2d-property}
-\centering
-\begin{tabular}[c]{| l | c | c | c | c | c |}
-\hline
-\multirow{2}{*}{Array} & \multicolumn{2}{ | c |}{Elements Size} & \multirow{2}{*}{Data Type} & \multicolumn{2}{ | c |}{Access Type} \\ \cline{2-3} \cline{5-6}
-  &  CSR & COO  & &  CSR & COO \\ \hline
-rowA & 2$\times$RPP & NNZ & Integer & Sequential & Sequential \\ \hline
-colA & NNZ & NNZ & Integer & Sequential & Sequential  \\ \hline
-valA & NNZ & NNZ & Floating & Sequential &  Sequential \\ \hline
-x & NNZ  & NNZ & Floating & Irregular &  Irregular \\ \hline
-y & RPP & NNZ & Floating & Sequential & Irregular  \\ \hline
-\end{tabular}
-\end{table}
-Table~\ref{tab:csr-spmv-2d-property} shows the memory access property for the 2D-Partitioning SpMV model. We can see the access 
-to the vector \texttt{x} is irregular for both CSR and COO  format. But access to the vector \texttt{y} is only irregular for the COO format. 
-But, irregular does not guaranty the fully random access to the memory, that is why we need to separate the \texttt{x} for both and \texttt{y} 
-for COO format into \textit{hit} and \textit{miss} portions.  
-All the data size is determined for all the MPI ranks of a whole node.
-
-\subsubsection{Micro-Benchmark for MPI communication}
-MPI communications mostly depend on the size of the message and network topology. We build a benchmark based on the OSU-MPI-Benchmark.
-Because of the dynamics of the network topology we build a polynomial model based on the number of nodes, number of MPI ranks, message size, 
-and MPI communication type.  
-
-\begin{comment}
-\begin{figure}[hbt!]
-	\centering
-	\subfigure[MPI All\_GatherV.]{\includegraphics[width=0.48\linewidth]{figures/osu/skylake_mpi_allgatherv.pdf}		\label{fig:osu-skylake-allgatherv}}
-	\subfigure[MPI All\_Reduce.]{\includegraphics[width=0.48\linewidth]{figures/osu/skylake_mpi_allreduce.pdf}		\label{fig:osu-skylake-reduce}}
-	\caption{Latency of the MPI collectives(All\_GatherV and All\_Reduce) on Skylake.}
-	\label{fig:osu-collectives}
-\end{figure}
-\end{comment}
-
-Figure~\ref{fig:spmv-model-from-benchmark} shows the overall structure of the SPMV model from micro-benchmark.
-
-\begin{figure}[hbt!]
-	\centering
-	\includegraphics[width=0.96\linewidth]{figures/spmv_hardware_model.pdf}
-	\caption{Structure of the SpMV model from micro-benchmark.}
-	\label{fig:spmv-model-from-benchmark}
-\end{figure}
-
-
-
 \subsection{Linear Model}
 \label{sec:linear-2d-spmv}
 We build up a linear model from generated random matrices of the different
@@ -482,6 +371,119 @@ the L1DR-SpMV which can be extracted after partitioning.
 \item Average inter-process call.
 \item Average data transfer.
 \end{enumerate}
+
+\subsection{SpMV Model from Micro-Benchmark}
+In this model, we predict the runtime of the SPMV based the performance of couple of micro-benchmark of 
+a selected computer architecture. Initially, SpMV on the distributed system can be divided into two main parts,
+\begin{itemize}
+\item Core Calculation: performance of the matrix-vector calculation in a MPI node.
+\item MPI Communication: communication runtime among MPI ranks(processes). 
+\end{itemize}
+\subsubsection{Core Calculation}
+We can represent the basic SpMV by $y=y+Val*x$, which requires two floating point operation(multiply and addition). 
+So, we can say we need to calculate NNZ(number of non-zeros) times FMA(fused multiply addition) to perform SpMV.
+But, first it needs to load the data and SpMV is bound by the memory bandwidth rather than instruction. So, we 
+separated the \textit{core calculation} into,
+\begin{itemize}
+\item Run time for FMA: $L_{FMA}\times NNZ$, where $L_{FMA}$ is the latency of a single FMA and $NNZ$ is number of non-zeros.
+\item Memory access latency: $L_{RW}$
+\end{itemize} 
+
+\paragraph{Micro Benchmark for \textit{FMA}}
+The throughput of SkylakeX is 2 instructions per cycle and the latency of FMA is 4 cycles. So there is a potential 
+of pipelinling($2\times 4 = 8$) to get the optimal results. Now, SkylakeX 
+has 512-bit register that can give the ability of the vectorization. For 64-bits floating point operation it can give vector 
+width 8 and for 32-bits it can give at max vector width 16. To find the peak performance of the FMA and to avoid the 
+read-write latency we need to setup the benchmark that datasets can be contained in the register. Now, SkylakeX has 32 
+registers. We can populate the pipeline by using sufficient ampunt of work. By varying the 
+number of fused-multiply-addition calculation, we can find out the performance limitation. From the information of the 
+processors, we can say that 4 cycles required for \textit{FMA} and the throughput of the FMA is 2 instruction per cycle, that means 
+we should at least use $4\times 2=8$ instruction at a time to populate the pipeline.
+\begin{figure}[hbt!]
+	\centering
+	\subfigure[Vector Width: 4]{\includegraphics[width=0.48\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_4.pdf}		\label{fig:mpi-skl-vec-4}}
+	\subfigure[Vector Width: 8]{\includegraphics[width=0.48\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_8.pdf}		\label{fig:mpi-skl-vec-8}}
+	\caption{Skylake: (MPI)Roofline model for bandwidth for FMA operation}
+	\label{fig:mpi-skl-fma}
+\end{figure}
+Figure~\ref{fig:mpi-skl-fma} shows the roofline model of the \textit{FMA} on SkylakeX processor. 
+We can estimate the theoritical peak performance a single FMA by the following equation,
+\begin{eqnarray*}
+P\ =\ Base\_Clock\_Frequency\times Vector\_Width\times \frac{FLOPs}{Instruction}
+\end{eqnarray*}
+The significance of the \textit{FMA} 
+latency is very few compare to the memory access latency. 
+
+\paragraph{Micro-Benchmark for Memory Access Latency}
+We explore the \textit{STREAM}~\cite{mccalpin1995stream} benchmark to find out the bandwidth of the memory access for a selected architecture.
+\begin{figure}[hbt!]
+	\centering
+	\subfigure[Single Precision.]{\includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_single_precision.pdf}		\label{fig:stream-single-copy}}
+	\subfigure[Double Precision.]{\includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_double_precision.pdf}		\label{fig:stream-double-copy}}
+	\caption{Single and double precision memory access bandwidth on Skylake processor.}
+	\label{fig:stream-copy-bandwidth}
+\end{figure}
+Figure~\ref{fig:stream-copy-bandwidth} shows the relation between data size and bandwidth of the SkylakeX processor. 
+To pick the right bandwidth for a matrix-vector multiplication, we first calculate the size of the data. Based on the size 
+of the data, we pick the average of the available immediate lower and higher point of the benchmark. Now, memory can 
+be accessed sequentially or random. To calculate the sequential and random access data, we build another micro-benchmark(Cache-Pattern). 
+Next, we will discuss about Cache-Pattern benchmark.
+ 
+\paragraph{Cache-Pattern Micro-Benchmark}
+In SpMV some array or vector traverse incrementally and some irregular pattern. All the incremental or regular data accesses are treated as 
+\textit{Sequential} data. So, we do not need any extra work to handle them. Now, it is not guaranty that all the irregular access pattern data 
+are fully random access. There is possibility chunks of data in the middle of the array are sequential. The main aim of this benchmark is to 
+separate a irregular access array into sequential and random access data. This benchmark walk through a array and calculate the cache miss 
+and hit based on the \textit{least recently used}(LRU) memory. all the \textit{hits} added to the sequential data and \textit{miss} points are 
+added to the random access data.
+\begin{table}[htb]
+\caption{Memory Access Property for 2D-Partitioning SpMV Model(RPP=rows per process, NNZ=non-zero elements).}
+\label{tab:csr-spmv-2d-property}
+\centering
+\begin{tabular}[c]{| l | c | c | c | c | c |}
+\hline
+\multirow{2}{*}{Array} & \multicolumn{2}{ | c |}{Elements Size} & \multirow{2}{*}{Data Type} & \multicolumn{2}{ | c |}{Access Type} \\ \cline{2-3} \cline{5-6}
+  &  CSR & COO  & &  CSR & COO \\ \hline
+rowA & 2$\times$RPP & NNZ & Integer & Sequential & Sequential \\ \hline
+colA & NNZ & NNZ & Integer & Sequential & Sequential  \\ \hline
+valA & NNZ & NNZ & Floating & Sequential &  Sequential \\ \hline
+x & NNZ  & NNZ & Floating & Irregular &  Irregular \\ \hline
+y & RPP & NNZ & Floating & Sequential & Irregular  \\ \hline
+\end{tabular}
+\end{table}
+Table~\ref{tab:csr-spmv-2d-property} shows the memory access property for the 2D-Partitioning SpMV model. We can see the access 
+to the vector \texttt{x} is irregular for both CSR and COO  format. But access to the vector \texttt{y} is only irregular for the COO format. 
+But, irregular does not guaranty the fully random access to the memory, that is why we need to separate the \texttt{x} for both and \texttt{y} 
+for COO format into \textit{hit} and \textit{miss} portions.  
+All the data size is determined for all the MPI ranks of a whole node.
+
+\subsubsection{Micro-Benchmark for MPI communication}
+MPI communications mostly depend on the size of the message and network topology. We build a benchmark based on the OSU-MPI-Benchmark.
+Because of the dynamics of the network topology we build a polynomial model based on the number of nodes, number of MPI ranks, message size, 
+and MPI communication type.  
+
+\begin{comment}
+\begin{figure}[hbt!]
+	\centering
+	\subfigure[MPI All\_GatherV.]{\includegraphics[width=0.48\linewidth]{figures/osu/skylake_mpi_allgatherv.pdf}		\label{fig:osu-skylake-allgatherv}}
+	\subfigure[MPI All\_Reduce.]{\includegraphics[width=0.48\linewidth]{figures/osu/skylake_mpi_allreduce.pdf}		\label{fig:osu-skylake-reduce}}
+	\caption{Latency of the MPI collectives(All\_GatherV and All\_Reduce) on Skylake.}
+	\label{fig:osu-collectives}
+\end{figure}
+\end{comment}
+
+Figure~\ref{fig:spmv-model-from-benchmark} shows the overall structure of the SPMV model from micro-benchmark.
+
+\begin{figure}[hbt!]
+	\centering
+	\includegraphics[width=0.96\linewidth]{figures/spmv_hardware_model.pdf}
+	\caption{Structure of the SpMV model from micro-benchmark.}
+	\label{fig:spmv-model-from-benchmark}
+\end{figure}
+
+
+
+
 
 \section{Experimental Settings}
 \subsection{Hardware Platform and Operating System}
