@@ -264,7 +264,7 @@ The significance of the \textit{FMA}
 latency is very few compare to the memory access latency. 
 
 \paragraph{Micro-Benchmark for Memory Access Latency}
-We explore the \textit{STREAM} benchmark to find out the bandwidth of the memory access for a selected architecture.
+We explore the \textit{STREAM}~\cite{mccalpin1995stream} benchmark to find out the bandwidth of the memory access for a selected architecture.
 \begin{figure}[hbt!]
 	\centering
 	\subfigure[Single Precision.]{\includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_single_precision.pdf}		\label{fig:stream-single-copy}}
@@ -745,6 +745,61 @@ $6.55$ average error for the G1DR on CSR and COO format
 respectively. The average error for L1DR is $14.15$ for CSR and $13.22$
 for the COO storage format.
 
+\subsection{Linear Model}
+Table~\ref{tab:overall-spmv-csr-2d-linear-single} shows the performance of the linear model on the CSR 2D-Partitioning. 
+The average error recorded $17.78$. 
+\begin{table}[htb]
+\caption{Linear model performance on CSR 2D-Partitioning(on Skylake).}
+\label{tab:overall-spmv-csr-2d-linear-single}
+\centering
+\begin{tabular}[c]{| l | c | c | c | c | c |}
+\hline
+\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
+  &  &  & Actual & Predicted &  \\ \hline
+\multirow{3}{*}{333SP}  &  4  &  144  &  5.5E-03  &  4.8E-03  &  12.1\% \\ \cline{2-6}
+ &  5  &  169  &  5.5E-03  &  4.2E-03  &  23.9\% \\ \cline{2-6}
+ &  7  &  225  &  5.5E-03  &  4.2E-03  &  23.2\% \\ \hline
+\multirow{3}{*}{AS365}  &  4  &  144  &  5.6E-03  &  4.9E-03  &  11.4\% \\ \cline{2-6}
+ &  5  &  169  &  5.6E-03  &  4.3E-03  &  22.6\% \\ \cline{2-6}
+ &  7  &  225  &  5.6E-03  &  4.3E-03  &  22.0\% \\ \hline
+\multirow{3}{*}{M6}  &  4  &  144  &  5.1E-03  &  4.5E-03  &  11.8\% \\ \cline{2-6}
+ &  5  &  169  &  5.1E-03  &  3.7E-03  &  27.4\% \\ \cline{2-6}
+ &  7  &  225  &  5.1E-03  &  4.0E-03  &  21.7\% \\ \hline
+\multirow{3}{*}{NLR}  &  4  &  144  &  6.2E-03  &  4.6E-03  &  27.0\% \\ \cline{2-6}
+ &  5  &  169  &  6.2E-03  &  3.9E-03  &  37.6\% \\ \cline{2-6}
+ &  7  &  225  &  6.2E-03  &  3.9E-03  &  36.8\% \\ \hline
+\multirow{2}{*}{hugetrace-00010}  &  4  &  144  &  1.9E-02  &  1.6E-02  &  11.6\% \\ \cline{2-6}
+ &  5  &  169  &  1.9E-02  &  1.7E-02  &  7.2\% \\ \hline
+\multirow{2}{*}{road\_central}  &  4  &  144  &  2.0E-02  &  1.9E-02  &  5.5\% \\ \cline{2-6}
+ &  5  &  169  &  2.0E-02  &  1.9E-02  &  8.1\% \\ \hline
+\multirow{2}{*}{road\_usa}  &  4  &  144  &  3.2E-02  &  2.9E-02  &  9.6\% \\ \cline{2-6}
+ &  5  &  169  &  3.2E-02  &  3.2E-02  &  0.5\% \\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[htb]
+\caption{Linear model performance on COO 2D-Partitioning(on Skylake).}
+\label{tab:overall-spmv-coo-2d-linear-single}
+\centering
+\begin{tabular}[c]{| l | c | c | c | c | c |}
+\hline
+\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
+  &  &  & Actual & Predicted &  \\ \hline
+\multirow{2}{*}{333SP}  &  5  &  169  &  4.1E-03  &  4.4E-03  &  6.0\% \\ \cline{2-6}
+ &  7  &  225  &  4.1E-03  &  4.4E-03  &  7.6\% \\ \hline
+\multirow{2}{*}{AS365}  &  5  &  169  &  4.3E-03  &  4.4E-03  &  3.7\% \\ \cline{2-6}
+ &  7  &  225  &  4.3E-03  &  4.4E-03  &  2.4\% \\ \hline
+\multirow{2}{*}{M6}  &  5  &  169  &  3.9E-03  &  3.8E-03  &  3.9\% \\ \cline{2-6}
+ &  7  &  225  &  3.9E-03  &  3.8E-03  &  3.2\% \\ \hline
+\multirow{2}{*}{NLR}  &  5  &  169  &  4.7E-03  &  -1.5E-03  &  130.9\% \\ \cline{2-6}
+ &  7  &  225  &  4.7E-03  &  -1.5E-03  &  131.4\% \\ \hline
+\multirow{2}{*}{hugetrace-00010}  &  4  &  144  &  1.3E-02  &  1.4E-02  &  7.4\% \\ \cline{2-6}
+ &  5  &  169  &  1.3E-02  &  8.6E-03  &  33.6\% \\ \hline
+\multirow{2}{*}{road\_central}  &  4  &  144  &  1.5E-02  &  1.6E-02  &  9.4\% \\ \cline{2-6}
+ &  5  &  169  &  1.5E-02  &  1.7E-02  &  16.6\% \\ \hline
+
+\end{tabular}
+\end{table}
 
 \section{Conclusion}
 In this paper, we provide three SpMV models to predict the run time of the
@@ -813,37 +868,7 @@ rmat\_700M4M  &  117.98  &  103.63  &  156.92  &  157.52  &  102.77  &  96.48  &
 \end{tabular}
 \end{table*}
 
-\subsection{Linear Model}
-Table~\ref{tab:overall-spmv-csr-2d-linear-single} shows the performance of the linear model on the CSR 2D-Partitioning. 
-The average error recorded $17.78$. 
-\begin{table}[htb]
-\caption{Linear model performance on CSR 2D-Partitioning(on Skylake).}
-\label{tab:overall-spmv-csr-2d-linear-single}
-\centering
-\begin{tabular}[c]{| l | c | c | c | c | c |}
-\hline
-\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
-  &  &  & Actual & Predicted &  \\ \hline
-\multirow{3}{*}{333SP}  &  4  &  144  &  5.5E-03  &  4.8E-03  &  12.1\% \\ \cline{2-6}
- &  5  &  169  &  5.5E-03  &  4.2E-03  &  23.9\% \\ \cline{2-6}
- &  7  &  225  &  5.5E-03  &  4.2E-03  &  23.2\% \\ \hline
-\multirow{3}{*}{AS365}  &  4  &  144  &  5.6E-03  &  4.9E-03  &  11.4\% \\ \cline{2-6}
- &  5  &  169  &  5.6E-03  &  4.3E-03  &  22.6\% \\ \cline{2-6}
- &  7  &  225  &  5.6E-03  &  4.3E-03  &  22.0\% \\ \hline
-\multirow{3}{*}{M6}  &  4  &  144  &  5.1E-03  &  4.5E-03  &  11.8\% \\ \cline{2-6}
- &  5  &  169  &  5.1E-03  &  3.7E-03  &  27.4\% \\ \cline{2-6}
- &  7  &  225  &  5.1E-03  &  4.0E-03  &  21.7\% \\ \hline
-\multirow{3}{*}{NLR}  &  4  &  144  &  6.2E-03  &  4.6E-03  &  27.0\% \\ \cline{2-6}
- &  5  &  169  &  6.2E-03  &  3.9E-03  &  37.6\% \\ \cline{2-6}
- &  7  &  225  &  6.2E-03  &  3.9E-03  &  36.8\% \\ \hline
-\multirow{2}{*}{hugetrace-00010}  &  4  &  144  &  1.9E-02  &  1.6E-02  &  11.6\% \\ \cline{2-6}
- &  5  &  169  &  1.9E-02  &  1.7E-02  &  7.2\% \\ \hline
-\multirow{2}{*}{road\_central}  &  4  &  144  &  2.0E-02  &  1.9E-02  &  5.5\% \\ \cline{2-6}
- &  5  &  169  &  2.0E-02  &  1.9E-02  &  8.1\% \\ \hline
-\multirow{1}{*}{road\_usa}  &  4  &  144  &  3.2E-02  &  2.9E-02  &  9.6\% \\ \hline
 
-\end{tabular}
-\end{table}
 
 \bibliographystyle{unsrt}
 \bibliography{spmv}
