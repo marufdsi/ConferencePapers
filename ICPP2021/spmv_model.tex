@@ -415,7 +415,9 @@ The significance of the \textit{FMA}
 latency is very few compare to the memory access latency. 
 
 \paragraph{Micro-Benchmark for Memory Access Latency}
-We explore the \textit{STREAM}~\cite{mccalpin1995stream} benchmark to find out the bandwidth of the memory access for a selected architecture.
+We use the \textit{STREAM}~\cite{mccalpin1995stream} benchmark to find
+out the bandwidth of the memory access for a selected architecture.
+
 \begin{figure}[hbt!]
 	\centering
 	\subfigure[Single Precision.]{\includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_single_precision.pdf}		\label{fig:stream-single-copy}}
@@ -423,19 +425,44 @@ We explore the \textit{STREAM}~\cite{mccalpin1995stream} benchmark to find out t
 	\caption{Single and double precision memory access bandwidth on Skylake processor.}
 	\label{fig:stream-copy-bandwidth}
 \end{figure}
-Figure~\ref{fig:stream-copy-bandwidth} shows the relation between data size and bandwidth of the SkylakeX processor. 
-To pick the right bandwidth for a matrix-vector multiplication, we first calculate the size of the data. Based on the size 
-of the data, we pick the average of the available immediate lower and higher point of the benchmark. Now, memory can 
-be accessed sequentially or random. To calculate the sequential and random access data, we build another micro-benchmark(Cache-Pattern). 
-Next, we will discuss about Cache-Pattern benchmark.
+
+Figure~\ref{fig:stream-copy-bandwidth} shows the relation between data
+size and bandwidth of the SkylakeX processor. To pick the right
+bandwidth for a matrix-vector multiplication, we first calculate the
+size of the data. Based on the size of the data, we pick the average
+of the available immediate lower and higher point of the
+benchmark. Note that in STREAM, all memory accesses are 
  
-\paragraph{Cache-Pattern Micro-Benchmark}
-In SpMV some array or vector traverse incrementally and some irregular pattern. All the incremental or regular data accesses are treated as 
-\textit{Sequential} data. So, we do not need any extra work to handle them. Now, it is not guaranty that all the irregular access pattern data 
-are fully random access. There is possibility chunks of data in the middle of the array are sequential. The main aim of this benchmark is to 
-separate a irregular access array into sequential and random access data. This benchmark walk through a array and calculate the cache miss 
-and hit based on the \textit{least recently used}(LRU) memory. all the \textit{hits} added to the sequential data and \textit{miss} points are 
-added to the random access data.
+\paragraph{Cache Pattern}
+In SpMV some of the arrays are traverse sequentially and some have irregular
+pattern. Table~\ref{tab:csr-spmv-2d-property} shows the memory access
+property for different matrix representation format. We can see the
+access to the vector \texttt{x} is irregular for both CSR and COO
+format. But access to the vector \texttt{y} is only irregular for the
+COO format.
+
+One could model all irregular accesses as random accesses. However we
+know that most graphs actually exhbit significant
+locality~\cite{Beamer15}. We model the memory accesses by computing a
+cache friendliness metric which represent the fraction of access that
+are in cache and the fraction that are in memory.
+
+This cache friendliness is computed for a matrix as follows. We assume
+the matrix is traversed sequentially and we model the access to the
+cache assuming the cache has the granularity of a cache line and that
+the cache replacement policy is LRU. And we assume that the cache is
+of the size of the L3 cache divided by the number of core on the
+processor. This model does not accurately capture many properties of
+the memory subsystem (such as associativity of caches, or cache
+sharing across multiple cores, the fact that there are multiple levels
+of caches, and concurrent processes); but it is a simple to compute
+estimation of how irregular the memory access actually are.
+
+All the sequential data accesses and \textit{hits} of irregular
+accesses are treated as \textit{Sequential} data accesses. And all
+cache \textit{miss} in irregular accesses are treated to random data
+accesses. \todo{then we use memory altency for these?}
+
 \begin{table}[htb]
 \caption{Memory Access Property for 2D-Partitioning SpMV Model(RPP=rows per process, NNZ=non-zero elements).}
 \label{tab:csr-spmv-2d-property}
@@ -451,11 +478,8 @@ x & NNZ  & NNZ & Floating & Irregular &  Irregular \\ \hline
 y & RPP & NNZ & Floating & Sequential & Irregular  \\ \hline
 \end{tabular}
 \end{table}
-Table~\ref{tab:csr-spmv-2d-property} shows the memory access property for the 2D-Partitioning SpMV model. We can see the access 
-to the vector \texttt{x} is irregular for both CSR and COO  format. But access to the vector \texttt{y} is only irregular for the COO format. 
-But, irregular does not guaranty the fully random access to the memory, that is why we need to separate the \texttt{x} for both and \texttt{y} 
-for COO format into \textit{hit} and \textit{miss} portions.  
-All the data size is determined for all the MPI ranks of a whole node.
+
+
 
 \subsubsection{Micro-Benchmark for MPI communication}
 MPI communications mostly depend on the size of the message and network topology. We build a benchmark based on the OSU-MPI-Benchmark.
