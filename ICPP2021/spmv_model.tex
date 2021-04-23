@@ -747,7 +747,7 @@ for the COO storage format.
 
 \subsection{Linear Model}
 Table~\ref{tab:overall-spmv-csr-2d-linear-single} shows the performance of the linear model on the CSR 2D-Partitioning. 
-The average error recorded $18.05$. 
+The average error recorded $16.79$. 
 \begin{table}[htb]
 \caption{Linear model performance on CSR 2D-Partitioning(on Skylake).}
 \label{tab:overall-spmv-csr-2d-linear-single}
@@ -756,33 +756,35 @@ The average error recorded $18.05$.
 \hline
 \multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
   &  &  & Actual & Predicted &  \\ \hline
-\multirow{4}{*}{333SP}  &  4  &  144  &  5.5E-03  &  4.9E-03  &  10.7\% \\ \cline{2-6}
- &  5  &  169  &  5.5E-03  &  4.2E-03  &  23.9\% \\ \cline{2-6}
- &  7  &  225  &  5.5E-03  &  4.2E-03  &  23.2\% \\ \cline{2-6}
+\multirow{4}{*}{333SP}  &  4  &  144  &  5.5E-03  &  5.0E-03  &  8.2\% \\ \cline{2-6}
+ &  5  &  169  &  5.5E-03  &  4.2E-03  &  23.5\% \\ \cline{2-6}
+ &  7  &  225  &  5.5E-03  &  4.2E-03  &  23.8\% \\ \cline{2-6}
  &  8  &  256  &  5.5E-03  &  4.3E-03  &  21.8\% \\ \hline
-\multirow{4}{*}{AS365}  &  4  &  144  &  5.6E-03  &  4.9E-03  &  11.4\% \\ \cline{2-6}
+\multirow{4}{*}{AS365}  &  4  &  144  &  5.6E-03  &  5.2E-03  &  7.6\% \\ \cline{2-6}
  &  5  &  169  &  5.6E-03  &  4.3E-03  &  22.6\% \\ \cline{2-6}
- &  7  &  225  &  5.6E-03  &  4.3E-03  &  22.0\% \\ \cline{2-6}
+ &  7  &  225  &  5.6E-03  &  4.3E-03  &  23.1\% \\ \cline{2-6}
  &  8  &  256  &  5.6E-03  &  4.4E-03  &  21.3\% \\ \hline
-\multirow{4}{*}{M6}  &  4  &  144  &  5.1E-03  &  4.5E-03  &  11.8\% \\ \cline{2-6}
- &  5  &  169  &  5.1E-03  &  3.7E-03  &  27.4\% \\ \cline{2-6}
- &  7  &  225  &  5.1E-03  &  4.0E-03  &  21.7\% \\ \cline{2-6}
+\multirow{4}{*}{M6}  &  4  &  144  &  5.1E-03  &  5.0E-03  &  2.1\% \\ \cline{2-6}
+ &  5  &  169  &  5.1E-03  &  3.8E-03  &  25.8\% \\ \cline{2-6}
+ &  7  &  225  &  5.1E-03  &  4.0E-03  &  22.3\% \\ \cline{2-6}
  &  8  &  256  &  5.1E-03  &  4.0E-03  &  22.3\% \\ \hline
-\multirow{4}{*}{NLR}  &  4  &  144  &  6.2E-03  &  4.6E-03  &  27.0\% \\ \cline{2-6}
- &  5  &  169  &  6.2E-03  &  3.9E-03  &  37.6\% \\ \cline{2-6}
- &  7  &  225  &  6.2E-03  &  3.9E-03  &  36.8\% \\ \cline{2-6}
+\multirow{4}{*}{NLR}  &  4  &  144  &  6.2E-03  &  5.0E-03  &  20.3\% \\ \cline{2-6}
+ &  5  &  169  &  6.2E-03  &  3.8E-03  &  38.8\% \\ \cline{2-6}
+ &  7  &  225  &  6.2E-03  &  3.9E-03  &  37.5\% \\ \cline{2-6}
  &  8  &  256  &  6.2E-03  &  3.9E-03  &  37.4\% \\ \hline
-\multirow{4}{*}{hugetrace-00010}  &  4  &  144  &  1.9E-02  &  1.7E-02  &  10.3\% \\ \cline{2-6}
- &  5  &  169  &  1.9E-02  &  1.6E-02  &  16.3\% \\ \cline{2-6}
- &  7  &  225  &  1.9E-02  &  1.7E-02  &  5.9\% \\ \cline{2-6}
+\multirow{4}{*}{hugetrace-00010}  &  4  &  144  &  1.9E-02  &  1.7E-02  &  9.3\% \\ \cline{2-6}
+ &  5  &  169  &  1.9E-02  &  1.6E-02  &  15.1\% \\ \cline{2-6}
+ &  7  &  225  &  1.9E-02  &  1.6E-02  &  14.7\% \\ \cline{2-6}
  &  8  &  256  &  1.9E-02  &  1.5E-02  &  18.5\% \\ \hline
-\multirow{4}{*}{road\_central}  &  4  &  144  &  2.0E-02  &  1.9E-02  &  4.7\% \\ \cline{2-6}
- &  5  &  169  &  2.0E-02  &  2.0E-02  &  3.6\% \\ \cline{2-6}
- &  7  &  225  &  2.0E-02  &  2.2E-02  &  8.2\% \\ \cline{2-6}
+\multirow{4}{*}{road\_central}  &  4  &  144  &  2.0E-02  &  1.9E-02  &  5.8\% \\ \cline{2-6}
+ &  5  &  169  &  2.0E-02  &  1.9E-02  &  7.4\% \\ \cline{2-6}
+ &  7  &  225  &  2.0E-02  &  2.0E-02  &  2.1\% \\ \cline{2-6}
  &  8  &  256  &  2.0E-02  &  1.7E-02  &  15.2\% \\ \hline
-\multirow{3}{*}{road\_usa}  &  4  &  144  &  3.2E-02  &  2.9E-02  &  9.5\% \\ \cline{2-6}
- &  5  &  169  &  3.2E-02  &  3.5E-02  &  9.3\% \\ \cline{2-6}
+\multirow{4}{*}{road\_usa}  &  4  &  144  &  3.2E-02  &  3.0E-02  &  8.8\% \\ \cline{2-6}
+ &  5  &  169  &  3.2E-02  &  3.3E-02  &  2.8\% \\ \cline{2-6}
+ &  7  &  225  &  3.2E-02  &  3.4E-02  &  4.9\% \\ \cline{2-6}
  &  8  &  256  &  3.2E-02  &  3.0E-02  &  7.0\% \\ \hline
+
 
 \end{tabular}
 \end{table}
