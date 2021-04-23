@@ -76,16 +76,35 @@ SpMV, MPI, Graph Partitioning
 %%%%%%%%% Why %%%%%%%%%
 Sparse matrix-vector multiplication(\textit{SpMV}) is one of the
 fundamental operations in sparse linear algebra. It is critical to
-solving linear systems and is widely used in engineering and scientific
-applications~\cite{gleich2015pagerank, saad2003iterative, dytrych2016efficacy}. 
-Distributed memory systems have entered a new age with
-the popularization of departmental clusters to support these
+solving linear systems and is widely used in engineering and
+scientific applications~\cite{gleich2015pagerank, saad2003iterative,
+  dytrych2016efficacy}.  Distributed memory systems have entered a new
+age with the popularization of departmental clusters to support these
 scientific and engineering applications.  Many different approaches
-have been proposed to improve \textit{SpMV} performance on
-clusters. But choosing the right approach still mostly relies on the rule
-of thumbs. We posit that building models to predict the performance of
-different configurations is the only way to make better-informed
-decisions.
+have been proposed to improve \textit{SpMV}. Just considering single
+node efforts leads to stream of storage format and optimizations. \todo{put a bunch of storage format papers}
+
+To perform sparse matrix-vector multiplication(\textit{SpMV}) on
+distributed systems, the matrix is usually partitioned into multiple
+parts and perform \textit{SpMV} on each part individually in the
+different processors. Good partitioning can ensure better load balance
+and limits the volume of communication between the underlying
+\textit{MPI process}. 1D and 2D partitioning techniques are theMany partitioning algorithms have been proposed
+to ensure good load balance and to minimize \textit{MPI
+  communications}~\cite{deveci2015hypergraph, karypis1995multilevel,
+  kaya2013analysis}.
+
+A common problem is to choose which of these many approaches to use.
+Often, picking the right approach to execute an application based on
+SpMV relies on the rule of thumbs. Ideally when deploying an
+application, the user should not have to pick a configuration, the
+systems should be able to pick a good configuration automatically; or
+at least provide a set of likely good candidate configuration. We
+posit that building models to predict the performance of different
+configurations is the only way to make better-informed
+decisions. These models could also be used to better understand the
+structure of the performance of SpMV based application across a wide
+range of graph and computing platform.
 
 In this paper, we propose a linear and polynomial \textit{Support
   Vector Regression}(\textit{SVR})~\cite{awad2015support} model to predict and analyze the
@@ -96,15 +115,6 @@ performance of the \textit{SpMV} mainly depends on the size and
 structure of the matrices and the architecture of the system. 
 
 %%%%%%%%% How %%%%%%%%
-To perform sparse matrix-vector multiplication(\textit{SpMV}) on
-distributed systems, the most common mechanism is to partition the
-matrix into multiple parts and perform \textit{SpMV} on each part
-individually in the different processors. Good partitioning can ensure
-better load balance and limits the volume of communication between the
-underlying \textit{MPI process}. Many partitioning
-algorithms have been proposed to ensure good load balance and to
-minimize \textit{MPI communications}~\cite{deveci2015hypergraph, karypis1995multilevel,
-  kaya2013analysis}.
 
 %%%%%%%%% What %%%%%%%%
 In this paper, we explore two partitioning modes (Uniform
