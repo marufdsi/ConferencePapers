@@ -1,4 +1,21 @@
-\documentclass[conference, 10ppt]{IEEEtran}
+%\documentclass[conference, 10ppt]{IEEEtran}
+\documentclass[sigconf,review,anonymous]{acmart}
+
+ \AtBeginDocument{%
+  \providecommand\BibTeX{{%
+    \normalfont B\kern-0.5em{\scshape i\kern-0.25em b}\kern-0.8em\TeX}}}
+\setcopyright{acmcopyright}
+\copyrightyear{2020}
+\acmYear{2020}
+%\acmDOI{10.1145/1122445.1122456}
+%
+\acmConference[ICPP  '21]{ICPP '21: 50th International Conference on Parallel 
+Processing (ICPP)}{August 9-12, 2021}{Chicago, Illinois, USA}
+\acmBooktitle{Woodstock '21: 50th International Conference on Parallel Processing (ICPP),
+  August 9-12, 2021, Chicago, Illinois, USA}
+\acmPrice{15.00}
+
+
 \usepackage{amsmath,amssymb,amsfonts}
 %\usepackage{algorithmic}
 \usepackage{graphicx}
@@ -8,7 +25,7 @@
 %
 %\usepackage{slashbox}
 \usepackage{url}
-\usepackage{cite}
+%\usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{graphicx}
 \usepackage{textcomp}
@@ -23,6 +40,7 @@
 \usepackage{multirow}
 \usepackage{xcolor,colortbl}
 
+
 %
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
@@ -35,23 +53,23 @@
 %
 \title{Performance Model of Iterated SpMV for Distributed System.}
 
-\author{\IEEEauthorblockN{Md Maruf Hossain}
-\IEEEauthorblockA{Dept. Computer Science \\
-\textit{University of North Carolina at Charlotte}\\
-Charlotte, USA \\
-mhossa10@uncc.edu}
-\and
-\IEEEauthorblockN{Erik Saule}
-\IEEEauthorblockA{Dept. Computer Science \\
-\textit{University of North Carolina at Charlotte}\\
-Charlotte, USA \\
-esaule@uncc.edu}
+\author{Md Maruf Hossain}
+\affiliation{
+  \institution{University of North Carolina at Charlotte}
+  \city{Charlotte}
+  \state{NC}
+  \country{USA}
 }
-%
-%%
-%%
-\maketitle
-%%
+\email{mhossa10@uncc.edu}
+
+\author{Erik Saule}
+\affiliation{
+  \institution{University of North Carolina at Charlotte}
+  \city{Charlotte}
+  \state{NC}
+  \country{USA}
+}
+\email{esaule@uncc.edu}
 
 \begin{abstract}
 Many applications rely on basic sparse linear algebra operations from numerical solvers to graph analysis 
@@ -68,10 +86,13 @@ experiments. We model the performance of multiple SpMV implementations on distri
 %%
 %%
 
-\begin{IEEEkeywords}
-SpMV, MPI, Graph Partitioning
-\end{IEEEkeywords}
+\keywords{SpMV, MPI, Graph Partitionings}
 
+%
+%%
+%%
+\maketitle
+%%
 \section{Introduction}
 %%%%%%%%% Why %%%%%%%%%
 Sparse matrix-vector multiplication(\textit{SpMV}) is one of the
@@ -83,16 +104,14 @@ age with the popularization of departmental clusters to support these
 scientific and engineering applications.  Many different approaches
 have been proposed to improve \textit{SpMV}. Just considering single
 node efforts leads to stream of storage format and optimizations. \todo{put a bunch of storage format papers}
-
+\\
 To perform sparse matrix-vector multiplication(\textit{SpMV}) on
 distributed systems, the matrix is usually partitioned into multiple
 parts and perform \textit{SpMV} on each part individually in the
 different processors. Good partitioning can ensure better load balance
 and limits the volume of communication between the underlying
 \textit{MPI process}. 1D and 2D partitioning techniques are theMany partitioning algorithms have been proposed
-to ensure good load balance and to minimize \textit{MPI
-  communications}~\cite{deveci2015hypergraph, karypis1995multilevel,
-  kaya2013analysis}.
+to ensure good load balance and to minimize \textit{MPI communications}~\cite{deveci2015hypergraph, karypis1995multilevel,kaya2013analysis}.
 
 A common problem is to choose which of these many approaches to use.
 Often, picking the right approach to execute an application based on
@@ -539,164 +558,45 @@ $7.62$ and $9.16$ respectively. The error is calculate by,
 error =\ \frac{actual\ time - predicted\ time}{actual\ time}\times 100
 \end{eqnarray*}
 \begin{table}[htb]
-\caption{Overall SpMV on Random CSR 2D Partitioning(on Skylake).}
+\caption{Benchmark SpMV Model on Random CSR 2D Partitioning(on Skylake).}
 \label{tab:overall-spmv-csr-2d-single}
+\let\center\empty
+\let\endcenter\relax
 \centering
-\begin{tabular}[c]{| l | c | c | c | c | c |}
-\hline
-\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
-  &  &  & Actual & Predicted &  \\ \hline
-\multirow{4}{*}{333SP}   &  4  &  144  &  7.2E-03  &  7.5E-03  &  4.1\% \\ \cline{2-6}
-  &  5  &  169  &  5.7E-03  &  6.6E-03  &  15.1\% \\ \cline{2-6}
-  &  7  &  225  &  4.7E-03  &  5.2E-03  &  8.8\% \\ \cline{2-6}
-  &  8  &  256  &  4.2E-03  &  4.5E-03  &  6.1\% \\ \hline
-\multirow{4}{*}{AS365}  &  4  &  144  &  7.4E-03  &  7.8E-03  &  4.7\% \\ \cline{2-6}
-  &  5  &  169  &  5.8E-03  &  6.8E-03  &  15.8\% \\ \cline{2-6}
-  &  7  &  225  &  4.7E-03  &  5.3E-03  &  13.5\% \\ \cline{2-6}
-  &  8  &  256  &  4.4E-03  &  4.6E-03  &  6.1\% \\ \hline
-\multirow{4}{*}{M6}   &  4  &  144  &  6.8E-03  &  7.0E-03  &  2.7\% \\ \cline{2-6}
-  &  5  &  169  &  5.3E-03  &  6.1E-03  &  15.0\% \\ \cline{2-6}
-  &  7  &  225  &  4.4E-03  &  4.8E-03  &  9.4\% \\ \cline{2-6}
-  &  8  &  256  &  4.0E-03  &  4.2E-03  &  4.7\% \\ \hline
-\multirow{4}{*}{NLR}   &  4  &  144  &  8.2E-03  &  8.7E-03  &  6.3\% \\ \cline{2-6}
-  &  5  &  169  &  6.5E-03  &  7.6E-03  &  17.8\% \\ \cline{2-6}
-  &  7  &  225  &  5.4E-03  &  6.0E-03  &  10.9\% \\ \cline{2-6}
-  &  8  &  256  &  4.8E-03  &  5.2E-03  &  9.0\% \\ \hline
-\multirow{4}{*}{hugetrace-00010}  &  4  &  144  &  2.3E-02  &  2.2E-02  &  2.9\% \\ \cline{2-6}
-  &  5  &  169  &  2.0E-02  &  2.0E-02  &  1.6\% \\ \cline{2-6}
-  &  7  &  225  &  1.7E-02  &  1.6E-02  &  5.6\% \\ \cline{2-6}
-  &  8  &  256  &  1.4E-02  &  1.5E-02  &  8.6\% \\ \hline
-\multirow{4}{*}{road\_central}  &  4  &  144  &  2.5E-02  &  2.4E-02  &  2.5\% \\ \cline{2-6}
-  &  5  &  169  &  2.2E-02  &  2.2E-02  &  1.4\% \\ \cline{2-6}
-  &  7  &  225  &  1.9E-02  &  1.8E-02  &  5.2\% \\ \cline{2-6}
-  &  8  &  256  &  1.5E-02  &  1.6E-02  &  7.2\% \\ \hline
-\multirow{4}{*}{road\_usa}  &  4  &  144  &  3.6E-02  &  4.1E-02  &  15.0\% \\ \cline{2-6}
-  &  5  &  169  &  3.6E-02  &  3.8E-02  &  5.2\% \\ \cline{2-6}
-  &  7  &  225  &  3.1E-02  &  3.1E-02  &  1.6\% \\ \cline{2-6}
-\  &  8  &  256  &  2.7E-02  &  2.8E-02  &  6.6\% \\ \hline
-\end{tabular}
+\resizebox{.8\width}{!}{\input{table/bench_model_csr_2d_info.tex}}
+
 \end{table}
 
 \begin{table}[htb]
-\caption{Overall SpMV on Random COO 2D Partitioning(on Skylake).}
+\caption{Benchmark SpMV Model on Random COO 2D Partitioning(on Skylake).}
 \label{tab:overall-spmv-coo-2d-single}
+\let\center\empty
+\let\endcenter\relax
 \centering
-\begin{tabular}[c]{| l | c | c | c | c | c |}
-\hline
-\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
-  &  &  & Actual & Predicted &  \\ \hline
-\multirow{4}{*}{333SP}   &  4  &  144  &  5.4E-03  &  5.6E-03  &  3.7\% \\ \cline{2-6}
-  &  5  &  169  &  4.2E-03  &  5.0E-03  &  19.6\% \\ \cline{2-6}
-  &  7  &  225  &  3.5E-03  &  4.0E-03  &  15.5\% \\ \cline{2-6}
-  &  8  &  256  &  3.4E-03  &  3.5E-03  &  4.3\% \\ \hline
-\multirow{4}{*}{AS365}  &  4  &  144  &  5.5E-03  &  5.8E-03  &  4.0\% \\ \cline{2-6}
-  &  5  &  169  &  4.3E-03  &  5.1E-03  &  19.7\% \\ \cline{2-6}
-  &  7  &  225  &  3.6E-03  &  4.1E-03  &  13.6\% \\ \cline{2-6}
-  &  8  &  256  &  3.6E-03  &  3.6E-03  &  0.1\% \\ \hline
-\multirow{4}{*}{M6}  &  4  &  144  &  5.0E-03  &  5.2E-03  &  3.5\% \\ \cline{2-6}
-  &  5  &  169  &  3.9E-03  &  4.6E-03  &  18.7\% \\ \cline{2-6}
-  &  7  &  225  &  3.4E-03  &  3.8E-03  &  9.7\% \\ \cline{2-6}
-  &  8  &  256  &  3.3E-03  &  3.3E-03  &  0.8\% \\ \hline
-\multirow{4}{*}{NLR}  &  4  &  144  &  6.1E-03  &  6.4E-03  &  4.9\% \\ \cline{2-6}
-  &  5  &  169  &  4.8E-03  &  5.7E-03  &  19.6\% \\ \cline{2-6}
-  &  7  &  225  &  4.0E-03  &  4.6E-03  &  15.2\% \\ \cline{2-6}
-  &  8  &  256  &  3.9E-03  &  4.0E-03  &  2.8\% \\ \hline
-\multirow{4}{*}{hugetrace-00010}   &  4  &  144  &  1.7E-02  &  1.6E-02  &  4.2\% \\ \cline{2-6}
-  &  5  &  169  &  1.3E-02  &  1.5E-02  &  13.7\% \\ \cline{2-6}
-  &  7  &  225  &  1.1E-02  &  1.2E-02  &  9.5\% \\ \cline{2-6}
-  &  8  &  256  &  1.0E-02  &  1.1E-02  &  9.2\% \\ \hline
-\multirow{4}{*}{road\_central}  &  4  &  144  &  1.9E-02  &  1.8E-02  &  5.6\% \\ \cline{2-6}
-  &  5  &  169  &  1.5E-02  &  1.7E-02  &  12.4\% \\ \cline{2-6}
-  &  7  &  225  &  1.3E-02  &  1.4E-02  &  8.7\% \\ \cline{2-6}
-\  &  8  &  256  &  1.2E-02  &  1.3E-02  &  8.1\% \\ \hline
-\multirow{4}{*}{road\_usa}  &  4  &  144  &  2.9E-02  &  3.0E-02  &  3.7\% \\ \cline{2-6}
-  &  5  &  169  &  3.2E-02  &  2.8E-02  &  12.6\% \\ \cline{2-6}
-  &  7  &  225  &  2.3E-02  &  2.4E-02  &  5.4\% \\ \cline{2-6}
-  &  8  &  256  &  2.0E-02  &  2.2E-02  &  7.6\% \\ \hline
-\end{tabular}
+\resizebox{.8\width}{!}{\input{table/bench_model_coo_2d_info.tex}}
 \end{table}
 
 \subsubsection{Local 1D-SpMV}
 Table~\ref{tab:overall-spmv-csr-lk-single} and~\ref{tab:overall-spmv-coo-lk-single} shows the overall performance of the Local 1D-Partitioning 
 SpMV model on CSR and COO storage formats respectively.  Average error for the CSR and COO formats are 
-$7.31$ and $8.81$ respectively. 
+$21.61$ and $19.52$ respectively. 
 
 \begin{table}[htb]
-\caption{Overall SpMV on Local CSR 1D-Row Partitioning(on Skylake).}
+\caption{Benchmark SpMV Model on Local CSR 1D-Row Partitioning(on Skylake).}
 \label{tab:overall-spmv-csr-lk-single}
+\let\center\empty
+\let\endcenter\relax
 \centering
-\begin{tabular}[c]{| l | c | c | c | c | c |}
-\hline
-\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
-  &  &  & Actual & Predicted &  \\ \hline
-\multirow{4}{*}{333SP}   &  4  &  144  &  1.2E-03  &  1.3E-03  &  9.8\% \\ \cline{2-6}
-  &  5  &  169  &  1.1E-03  &  1.2E-03  &  12.6\% \\ \cline{2-6}
-  &  7  &  225  &  8.4E-04  &  9.7E-04  &  15.6\% \\ \cline{2-6}
-  &  8  &  256  &  8.2E-04  &  8.8E-04  &  6.6\% \\ \hline
-\multirow{4}{*}{AS365}  &  4  &  144  &  1.3E-03  &  1.5E-03  &  9.1\% \\ \cline{2-6}
-  &  5  &  169  &  1.2E-03  &  1.3E-03  &  10.9\% \\ \cline{2-6}
-  &  7  &  225  &  9.3E-04  &  1.0E-03  &  11.5\% \\ \cline{2-6}
-  &  8  &  256  &  8.6E-04  &  9.3E-04  &  7.9\% \\ \hline
-\multirow{4}{*}{M6}  &  4  &  144  &  1.2E-03  &  1.4E-03  &  12.5\% \\ \cline{2-6}
-  &  5  &  169  &  1.1E-03  &  1.2E-03  &  15.4\% \\ \cline{2-6}
-  &  7  &  225  &  8.9E-04  &  9.8E-04  &  10.7\% \\ \cline{2-6}
-  &  8  &  256  &  8.1E-04  &  8.9E-04  &  9.3\% \\ \hline
-\multirow{4}{*}{NLR}  &  4  &  144  &  1.4E-03  &  1.6E-03  &  9.3\% \\ \cline{2-6}
-  &  5  &  169  &  1.3E-03  &  1.4E-03  &  8.9\% \\ \cline{2-6}
-  &  7  &  225  &  9.8E-04  &  1.1E-03  &  12.0\% \\ \cline{2-6}
-  &  8  &  256  &  9.6E-04  &  9.9E-04  &  3.0\% \\ \hline
-\multirow{4}{*}{hugetrace-00010}   &  4  &  144  &  2.5E-03  &  2.7E-03  &  5.3\% \\ \cline{2-6}
- &  5  &  169  &  2.2E-03  &  2.4E-03  &  8.8\% \\ \cline{2-6}
- &  7  &  225  &  1.8E-03  &  1.9E-03  &  6.8\% \\ \cline{2-6}
-  &  8  &  256  &  1.7E-03  &  1.7E-03  &  2.6\% \\ \hline
-\multirow{4}{*}{road\_central}  &  4  &  144  &  2.7E-03  &  2.6E-03  &  2.1\% \\ \cline{2-6}
-  &  5  &  169  &  2.4E-03  &  2.3E-03  &  1.5\% \\ \cline{2-6}
-  &  7  &  225  &  1.9E-03  &  1.9E-03  &  0.5\% \\ \cline{2-6}
-  &  8  &  256  &  1.8E-03  &  1.7E-03  &  1.2\% \\ \hline
-\multirow{4}{*}{road\_usa}  &  4  &  144  &  4.1E-03  &  3.8E-03  &  7.9\% \\ \cline{2-6}
-  &  5  &  169  &  3.4E-03  &  3.4E-03  &  0.7\% \\ \cline{2-6}
-  &  7  &  225  &  2.8E-03  &  2.8E-03  &  1.4\% \\ \cline{2-6}
-  &  8  &  256  &  2.6E-03  &  2.6E-03  &  0.7\% \\ \hline
-\end{tabular}
+\resizebox{.8\width}{!}{\input{table/bench_model_local_csr_1d_info.tex}}
 \end{table}
 
 \begin{table}[htb]
-\caption{Overall SpMV on Local COO 1D-Row Partitioning(on Skylake).}
+\caption{Benchmark SpMV Model on Local COO 1D-Row Partitioning(on Skylake).}
 \label{tab:overall-spmv-coo-lk-single}
+\let\center\empty
+\let\endcenter\relax
 \centering
-\begin{tabular}[c]{| l | c | c | c | c | c |}
-\hline
-\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
-  &  &  & Actual & Predicted &  \\ \hline
-\multirow{4}{*}{333SP}  &  4  &  144  &  1.2E-03  &  1.1E-03  &  8.6\% \\ \cline{2-6}
- &  5  &  169  &  1.1E-03  &  9.6E-04  &  11.8\% \\ \cline{2-6}
- &  7  &  225  &  8.9E-04  &  8.2E-04  &  8.7\% \\ \cline{2-6}
- &  8  &  256  &  8.2E-04  &  7.8E-04  &  5.6\% \\ \hline
-\multirow{4}{*}{AS365}  &  4  &  144  &  1.4E-03  &  1.2E-03  &  11.0\% \\ \cline{2-6}
- &  5  &  169  &  1.2E-03  &  1.1E-03  &  7.0\% \\ \cline{2-6}
- &  7  &  225  &  9.3E-04  &  9.1E-04  &  2.4\% \\ \cline{2-6}
- &  8  &  256  &  8.5E-04  &  8.7E-04  &  2.9\% \\ \hline
-\multirow{4}{*}{M6}  &  4  &  144  &  1.3E-03  &  1.2E-03  &  6.9\% \\ \cline{2-6}
- &  5  &  169  &  1.1E-03  &  1.0E-03  &  8.9\% \\ \cline{2-6}
- &  7  &  225  &  9.1E-04  &  8.7E-04  &  4.5\% \\ \cline{2-6}
- &  8  &  256  &  8.2E-04  &  8.5E-04  &  2.7\% \\ \hline
-\multirow{4}{*}{NLR}  &  4  &  144  &  1.4E-03  &  1.3E-03  &  7.8\% \\ \cline{2-6}
- &  5  &  169  &  1.3E-03  &  1.1E-03  &  12.1\% \\ \cline{2-6}
- &  7  &  225  &  1.0E-03  &  9.6E-04  &  5.7\% \\ \cline{2-6}
- &  8  &  256  &  9.6E-04  &  9.2E-04  &  4.4\% \\ \cline{2-6}
-\multirow{4}{*}{hugetrace-00010}  &  4  &  144  &  2.5E-03  &  2.2E-03  &  12.3\% \\ \cline{2-6}
- &  5  &  169  &  2.2E-03  &  2.0E-03  &  8.4\% \\ \cline{2-6}
- &  7  &  225  &  1.8E-03  &  1.6E-03  &  6.3\% \\ \cline{2-6}
- &  8  &  256  &  1.6E-03  &  1.5E-03  &  5.1\% \\ \hline
-\multirow{4}{*}{road\_central}  &  4  &  144  &  2.5E-03  &  2.1E-03  &  13.0\% \\ \cline{2-6}
- &  5  &  169  &  2.1E-03  &  1.9E-03  &  9.5\% \\ \cline{2-6}
- &  7  &  225  &  1.7E-03  &  1.6E-03  &  7.2\% \\ \cline{2-6}
- &  8  &  256  &  1.6E-03  &  1.5E-03  &  9.2\% \\ \hline
-\multirow{4}{*}{road\_usa}  &  4  &  144  &  3.8E-03  &  2.9E-03  &  22.9\% \\ \cline{2-6}
- &  5  &  169  &  3.2E-03  &  2.6E-03  &  18.1\% \\ \cline{2-6}
- &  7  &  225  &  2.6E-03  &  2.2E-03  &  12.2\% \\ \cline{2-6}
- &  8  &  256  &  2.4E-03  &  2.1E-03  &  11.6\% \\ \hline
-\end{tabular}
+\resizebox{.8\width}{!}{\input{table/bench_model_local_csr_1d_info.tex}}
 \end{table}
 
 
@@ -706,81 +606,21 @@ SpMV model on CSR and COO storage formats respectively.  Average error for the C
 $13.63$ and $25.3$ respectively. 
 
 \begin{table}[htb]
-\caption{Overall SpMV on Global CSR 1D-Row Partitioning(on Skylake).}
+\caption{Benchmark SpMV Model on Global CSR 1D-Row Partitioning(on Skylake).}
 \label{tab:overall-spmv-csr-gk-single}
+\let\center\empty
+\let\endcenter\relax
 \centering
-\begin{tabular}[c]{| l | c | c | c | c | c |}
-\hline
-\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
-  &  &  & Actual & Predicted &  \\ \hline
-\multirow{4}{*}{333SP}  &  4  &  144  &  2.6E-02  &  2.1E-02  &  19.2\% \\ \cline{2-6}
-  &  5  &  169  &  2.0E-02  &  2.0E-02  &  2.2\% \\ \cline{2-6}
-  &  7  &  225  &  1.9E-02  &  1.8E-02  &  5.6\% \\ \cline{2-6}
-  &  8  &  256  &  2.4E-02  &  1.9E-02  &  21.2\% \\ \hline
-\multirow{4}{*}{AS365}  &  4  &  144  &  2.7E-02  &  2.2E-02  &  19.2\% \\ \cline{2-6}
-  &  5  &  169  &  2.1E-02  &  2.0E-02  &  2.7\% \\ \cline{2-6}
-  &  7  &  225  &  2.0E-02  &  1.9E-02  &  4.8\% \\ \cline{2-6}
-  &  8  &  256  &  2.4E-02  &  1.9E-02  &  21.3\% \\ \hline
-\multirow{4}{*}{M6}   &  4  &  144  &  2.5E-02  &  2.0E-02  &  19.2\% \\ \cline{2-6}
-  &  5  &  169  &  1.9E-02  &  1.8E-02  &  3.2\% \\ \cline{2-6}
-  &  7  &  225  &  1.8E-02  &  1.7E-02  &  4.5\% \\ \cline{2-6}
-  &  8  &  256  &  2.2E-02  &  1.8E-02  &  21.1\% \\ \hline
-\multirow{4}{*}{NLR}  &  4  &  144  &  2.9E-02  &  2.4E-02  &  19.2\% \\ \cline{2-6}
-  &  5  &  169  &  2.2E-02  &  2.2E-02  &  2.3\% \\ \cline{2-6}
-  &  7  &  225  &  2.1E-02  &  2.1E-02  &  4.1\% \\ \cline{2-6}
-  &  8  &  256  &  2.6E-02  &  2.1E-02  &  21.3\% \\ \hline
-\multirow{4}{*}{hugetrace-00010}  &  4  &  144  &  8.2E-02  &  6.6E-02  &  20.0\% \\ \cline{2-6}
-  &  5  &  169  &  6.2E-02  &  6.1E-02  &  0.7\% \\ \cline{2-6}
-  &  7  &  225  &  6.4E-02  &  5.7E-02  &  10.2\% \\ \cline{2-6}
-  &  8  &  256  &  7.3E-02  &  5.7E-02  &  22.7\% \\ \hline
-\multirow{4}{*}{road\_central} &  4  &  144  &  9.6E-02  &  7.6E-02  &  20.2\% \\ \cline{2-6}
-\  &  5  &  169  &  7.1E-02  &  7.1E-02  &  0.5\% \\ \cline{2-6}
-  &  7  &  225  &  7.4E-02  &  6.6E-02  &  10.3\% \\ \cline{2-6}
-  &  8  &  256  &  8.6E-02  &  6.6E-02  &  23.4\% \\ \hline
-\multirow{4}{*}{road\_usa}   &  4  &  144  &  1.6E-01  &  1.3E-01  &  19.3\% \\ \cline{2-6}
-  &  5  &  169  &  9.9E-02  &  1.2E-01  &  23.8\% \\ \cline{2-6}
-  &  7  &  225  &  9.8E-02  &  1.1E-01  &  16.5\% \\ \cline{2-6}
-  &  8  &  256  &  1.5E-01  &  1.1E-01  &  23.1\% \\ \hline
-\end{tabular}
+\resizebox{.8\width}{!}{\input{table/bench_model_global_csr_1d_info.tex}}
 \end{table}
 
 \begin{table}[htb]
-\caption{Overall SpMV on Global COO 1D-Row Partitioning(on Skylake).}
+\caption{Benchmark SpMV Model on Global COO 1D-Row Partitioning(on Skylake).}
 \label{tab:overall-spmv-coo-gk-single}
+\let\center\empty
+\let\endcenter\relax
 \centering
-\begin{tabular}[c]{| l | c | c | c | c | c |}
-\hline
-\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
-  &  &  & Actual & Predicted &  \\ \hline
-\multirow{4}{*}{333SP}  &  4  &  144  &  3.3E-02  &  2.1E-02  &  34.4\% \\ \cline{2-6}
-  &  5  &  169  &  2.7E-02  &  2.0E-02  &  26.0\% \\ \cline{2-6}
-  &  7  &  225  &  2.4E-02  &  1.9E-02  &  23.9\% \\ \cline{2-6}
-  &  8  &  256  &  2.7E-02  &  1.9E-02  &  30.9\% \\ \hline
-\multirow{4}{*}{AS365}  &  4  &  144  &  3.3E-02  &  2.2E-02  &  34.4\% \\ \cline{2-6}
-  &  5  &  169  &  2.7E-02  &  2.0E-02  &  26.1\% \\ \cline{2-6}
-  &  7  &  225  &  2.5E-02  &  1.9E-02  &  24.3\% \\ \cline{2-6}
-  &  8  &  256  &  2.8E-02  &  1.9E-02  &  31.0\% \\ \hline
-\multirow{4}{*}{M6}  &  4  &  144  &  3.1E-02  &  2.0E-02  &  35.2\% \\ \cline{2-6}
-  &  5  &  169  &  2.5E-02  &  1.9E-02  &  26.1\% \\ \cline{2-6}
-  &  7  &  225  &  2.3E-02  &  1.7E-02  &  23.9\% \\ \cline{2-6}
-  &  8  &  256  &  2.6E-02  &  1.8E-02  &  30.9\% \\ \hline
-\multirow{4}{*}{NLR}   &  4  &  144  &  3.6E-02  &  2.4E-02  &  34.5\% \\ \cline{2-6}
-  &  5  &  169  &  3.0E-02  &  2.2E-02  &  26.1\% \\ \cline{2-6}
-  &  7  &  225  &  2.7E-02  &  2.1E-02  &  24.1\% \\ \cline{2-6}
-  &  8  &  256  &  3.0E-02  &  2.1E-02  &  31.1\% \\ \hline
-\multirow{4}{*}{hugetrace-00010}  &  4  &  144  &  9.3E-02  &  6.6E-02  &  28.6\% \\ \cline{2-6}
-  &  5  &  169  &  6.7E-02  &  6.2E-02  &  7.6\% \\ \cline{2-6}
-  &  7  &  225  &  7.0E-02  &  5.7E-02  &  18.3\% \\ \cline{2-6}
-  &  8  &  256  &  7.9E-02  &  5.7E-02  &  28.2\% \\ \hline
-\multirow{4}{*}{road\_central}  &  4  &  144  &  1.1E-01  &  7.7E-02  &  27.1\% \\ \cline{2-6}
-  &  5  &  169  &  7.1E-02  &  7.2E-02  &  1.7\% \\ \cline{2-6}
-  &  7  &  225  &  8.0E-02  &  6.7E-02  &  16.6\% \\ \cline{2-6}
-  &  8  &  256  &  9.1E-02  &  6.6E-02  &  27.9\% \\ \hline
-\multirow{4}{*}{road\_usa}  &  4  &  144  &  1.8E-01  &  1.3E-01  &  26.1\% \\ \cline{2-6}
-  &  5  &  169  &  1.5E-01  &  1.2E-01  &  16.0\% \\ \cline{2-6}
-  &  7  &  225  &  1.4E-01  &  1.1E-01  &  20.1\% \\ \cline{2-6}
-  &  8  &  256  &  1.5E-01  &  1.1E-01  &  27.4\% \\ \hline
-\end{tabular}
+\resizebox{.8\width}{!}{\input{table/bench_model_global_coo_1d_info.tex}}
 \end{table}
 
 \subsection{Polynomial SVR Model}
@@ -805,83 +645,19 @@ linear model on the CSR and COO 2D-Partitioning, where the average errors are re
 \begin{table}[htb]
 \caption{Linear model performance on CSR 2D-Partitioning(on Skylake).}
 \label{tab:overall-spmv-csr-2d-linear-single}
+\let\center\empty
+\let\endcenter\relax
 \centering
-\begin{tabular}[c]{| l | c | c | c | c | c |}
-\hline
-\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
-  &  &  & Actual & Predicted &  \\ \hline
-\multirow{4}{*}{333SP}  &  4  &  144  &  7.2E-03  &  5.9E-03  &  18.0\% \\ \cline{2-6}
- &  5  &  169  &  5.7E-03  &  4.6E-03  &  20.1\% \\ \cline{2-6}
- &  7  &  225  &  4.7E-03  &  3.9E-03  &  18.7\% \\ \cline{2-6}
- &  8  &  256  &  4.2E-03  &  3.7E-03  &  13.0\% \\ \hline
-\multirow{4}{*}{AS365}  &  4  &  144  &  7.4E-03  &  5.7E-03  &  23.1\% \\ \cline{2-6}
- &  5  &  169  &  5.8E-03  &  4.7E-03  &  19.9\% \\ \cline{2-6}
- &  7  &  225  &  4.7E-03  &  3.9E-03  &  16.0\% \\ \cline{2-6}
- &  8  &  256  &  4.4E-03  &  3.5E-03  &  20.0\% \\ \hline
-\multirow{4}{*}{M6}  &  4  &  144  &  6.8E-03  &  5.4E-03  &  19.9\% \\ \cline{2-6}
- &  5  &  169  &  5.3E-03  &  4.2E-03  &  19.9\% \\ \cline{2-6}
- &  7  &  225  &  4.4E-03  &  3.5E-03  &  19.4\% \\ \cline{2-6}
- &  8  &  256  &  4.0E-03  &  3.5E-03  &  12.0\% \\ \hline
-\multirow{4}{*}{NLR}  &  4  &  144  &  8.2E-03  &  7.1E-03  &  14.0\% \\ \cline{2-6}
- &  5  &  169  &  6.5E-03  &  5.3E-03  &  18.4\% \\ \cline{2-6}
- &  7  &  225  &  5.4E-03  &  4.7E-03  &  14.0\% \\ \cline{2-6}
- &  8  &  256  &  4.8E-03  &  4.1E-03  &  14.4\% \\ \hline
-\multirow{4}{*}{hugetrace-00010}  &  4  &  144  &  2.3E-02  &  2.0E-02  &  12.3\% \\ \cline{2-6}
- &  5  &  169  &  2.0E-02  &  2.0E-02  &  0.1\% \\ \cline{2-6}
- &  7  &  225  &  1.7E-02  &  1.1E-02  &  34.3\% \\ \cline{2-6}
- &  8  &  256  &  1.4E-02  &  1.3E-02  &  3.2\% \\ \hline
-\multirow{4}{*}{road\_central}  &  4  &  144  &  2.5E-02  &  2.2E-02  &  10.8\% \\ \cline{2-6}
- &  5  &  169  &  2.2E-02  &  2.3E-02  &  3.8\% \\ \cline{2-6}
- &  7  &  225  &  1.9E-02  &  1.6E-02  &  17.8\% \\ \cline{2-6}
- &  8  &  256  &  1.5E-02  &  1.5E-02  &  4.0\% \\ \hline
-\multirow{4}{*}{road\_usa}  &  4  &  144  &  3.6E-02  &  3.4E-02  &  6.1\% \\ \cline{2-6}
- &  5  &  169  &  3.6E-02  &  4.4E-02  &  23.9\% \\ \cline{2-6}
- &  7  &  225  &  3.1E-02  &  3.0E-02  &  3.1\% \\ \cline{2-6}
- &  8  &  256  &  2.7E-02  &  2.4E-02  &  8.7\% \\ \hline
-
-\end{tabular}
+\resizebox{.8\width}{!}{\input{table/linear_csr_2d_info.tex}}
 \end{table}
 
 \begin{table}[htb]
 \caption{Linear model performance on COO 2D-Partitioning(on Skylake).}
 \label{tab:overall-spmv-coo-2d-linear-single}
+\let\center\empty
+\let\endcenter\relax
 \centering
-\begin{tabular}[c]{| l | c | c | c | c | c |}
-\hline
-\multirow{2}{*}{Matrices} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{2}{| c |}{Time(s)} & \multirow{2}{*}{Error\%} \\ \cline{4-5}
-  &  &  & Actual & Predicted &  \\ \hline
-\multirow{4}{*}{333SP}  &  4  &  144  &  5.4E-03  &  5.5E-03  &  2.3\% \\ \cline{2-6}
- &  5  &  169  &  4.2E-03  &  4.6E-03  &  10.9\% \\ \cline{2-6}
- &  7  &  225  &  3.5E-03  &  3.5E-03  &  0.8\% \\ \cline{2-6}
- &  8  &  256  &  3.4E-03  &  3.2E-03  &  3.8\% \\ \hline
-\multirow{4}{*}{AS365}  &  4  &  144  &  5.5E-03  &  6.3E-03  &  13.4\% \\ \cline{2-6}
- &  5  &  169  &  4.3E-03  &  5.0E-03  &  17.1\% \\ \cline{2-6}
- &  7  &  225  &  3.6E-03  &  3.7E-03  &  2.7\% \\ \cline{2-6}
- &  8  &  256  &  3.6E-03  &  3.8E-03  &  4.0\% \\ \hline
-\multirow{4}{*}{M6}  &  4  &  144  &  5.0E-03  &  5.7E-03  &  12.5\% \\ \cline{2-6}
- &  5  &  169  &  3.9E-03  &  4.2E-03  &  8.6\% \\ \cline{2-6}
- &  7  &  225  &  3.4E-03  &  3.3E-03  &  3.9\% \\ \cline{2-6}
- &  8  &  256  &  3.3E-03  &  3.1E-03  &  6.3\% \\ \hline
-\multirow{4}{*}{NLR}  &  4  &  144  &  6.1E-03  &  7.3E-03  &  19.4\% \\ \cline{2-6}
- &  5  &  169  &  4.8E-03  &  4.8E-03  &  0.5\% \\ \cline{2-6}
- &  7  &  225  &  4.0E-03  &  5.2E-03  &  29.2\% \\ \cline{2-6}
- &  8  &  256  &  3.9E-03  &  4.0E-03  &  2.6\% \\ \hline
-\multirow{4}{*}{hugetrace-00010}  &  4  &  144  &  1.7E-02  &  2.1E-02  &  24.4\% \\ \cline{2-6}
- &  5  &  169  &  1.3E-02  &  1.1E-02  &  13.8\% \\ \cline{2-6}
- &  7  &  225  &  1.1E-02  &  1.2E-02  &  5.7\% \\ \cline{2-6}
- &  8  &  256  &  1.0E-02  &  9.4E-03  &  7.8\% \\ \hline
-\multirow{4}{*}{road\_central}  &  4  &  144  &  1.9E-02  &  2.3E-02  &  17.6\% \\ \cline{2-6}
- &  5  &  169  &  1.5E-02  &  1.9E-02  &  30.3\% \\ \cline{2-6}
- &  7  &  225  &  1.3E-02  &  1.4E-02  &  5.2\% \\ \cline{2-6}
- &  8  &  256  &  1.2E-02  &  1.0E-02  &  11.0\% \\ \hline
-\multirow{4}{*}{road\_usa}  &  4  &  144  &  2.9E-02  &  2.8E-02  &  5.3\% \\ \cline{2-6}
- &  5  &  169  &  3.2E-02  &  3.8E-02  &  18.3\% \\ \cline{2-6}
- &  7  &  225  &  2.3E-02  &  1.9E-02  &  17.2\% \\ \cline{2-6}
- &  8  &  256  &  2.0E-02  &  2.6E-02  &  28.2\% \\ \hline
-
-
-
-\end{tabular}
+\resizebox{.8\width}{!}{\input{table/linear_coo_2d_info.tex}}
 \end{table}
 
 \section{Conclusion}
@@ -898,40 +674,10 @@ correct graph representation format.
 \begin{table*}
  \caption{Dynamic SVR performance model for SpMV on SkylakeX.}
  \label{tab:dynamic-svr-spmv-performance}
- \centering
- \begin{tabular}[c]{| l | c | c | c | c | c | c | c | c |}
- \hline
-\multirow{2}{*}{Name} & \multirow{2}{*}{Nodes} & \multirow{2}{*}{Processes} & \multicolumn{6}{c |} {Error\%} \\ \cline{4-9}
- &  &  & CSR L1DR & COO L1DRV & CSR G1DR & COO G1DR & CSR 2DU & COO 2DU \\ \hline
-\multirow{4}{*}{333SP}  &  4  &  144 & \cellcolor{green!25}  15.8 & 15.5 & 3.11 & 2.24 & 0.47 & 5.89 \\ \cline{2-9}
- &  5  &  169 & \cellcolor{green!25}  17.6 & 18.7 & 11.9 & 6.55 & 17.4 & 9.52 \\ \cline{2-9}
- &  7  &  225 & \cellcolor{green!25}  20.3 & 20.9 & 8.65 & 6.21 & 16.5 & 8.79 \\ \cline{2-9}
- &  8  &  256 & \cellcolor{green!25}  24.6 & 22.6 & 5.36 & 3.16 & 13.2 & 2.79 \\ \hline
-\multirow{4}{*}{AS365}  &  4  &  144 & \cellcolor{green!25}  20.2 & 19.1 & 2.98 & 2.15 & 0.618 & 5.99 \\ \cline{2-9}
- &  5  &  169 & \cellcolor{green!25}  19.7 & 17.7 & 11.5 & 6.58 & 17.2 & 9.17 \\ \cline{2-9}
- &  7  &  225 & \cellcolor{green!25}  23.2 & 20.0 & 9.61 & 5.71 & 20.6 & 6.52 \\ \cline{2-9}
- &  8  &  256 & \cellcolor{red!25}  22.8 & \cellcolor{blue!25}  18.1 & 5.38 & 3.35 & 12.3 & 1.89 \\ \hline
-\multirow{4}{*}{M6}  &  4  &  144 & \cellcolor{green!25}  20.7 & 18.8 & 3.22 & 3.5 & 0.178 & 5.06 \\ \cline{2-9}
- &  5  &  169 & \cellcolor{green!25}  19.0 & 20.4 & 10.6 & 6.44 & 19.8 & 9.95 \\ \cline{2-9}
- &  7  &  225 & \cellcolor{green!25}  23.9 & 23.8 & 9.68 & 6.04 & 19.7 & 4.55 \\ \cline{2-9}
- &  8  &  256 & \cellcolor{red!25}  25.1 & \cellcolor{blue!25}  21.1 & 5.31 & 3.31 & 14.1 & 1.04 \\ \hline
-\multirow{4}{*}{NLR}  &  4  &  144 & \cellcolor{green!25}  18.2 & 15.0 & 2.85 & 2.07 & 1.8 & 6.51 \\ \cline{2-9}
- &  5  &  169 & \cellcolor{green!25}  21.2 & 18.9 & 12.2 & 6.81 & 15.9 & 7.37 \\ \cline{2-9}
- &  7  &  225 & \cellcolor{green!25}  22.1 & 19.8 & 10.7 & 6.14 & 14.5 & 6.27 \\ \cline{2-9}
- &  8  &  256 & \cellcolor{green!25}  24.6 & 22.8 & 5.28 & 3.26 & 11.8 & 1.08 \\ \hline
-\multirow{4}{*}{hugetrace-00010}  &  4  &  144 & \cellcolor{blue!25}  0.609 & \cellcolor{red!25}  3.1 & 0.732 & 0.784 & 12.2 & 13.4 \\ \cline{2-9}
- &  5  &  169 & \cellcolor{blue!25}  0.358 & \cellcolor{red!25}  2.41 & 18.7 & 25.7 & 6.88 & 2.0 \\ \cline{2-9}
- &  7  &  225 & 6.04 & \cellcolor{green!25}  6.3 & 8.29 & 10.2 & 8.79 & 1.39 \\ \cline{2-9}
- &  8  &  256 & 8.02 & \cellcolor{green!25}  7.71 & 3.33 & 2.02 & 2.43 & 0.431 \\ \hline
-\multirow{4}{*}{road\_central}  &  4  &  144 & 2.96 & \cellcolor{green!25}  6.02 & 0.47 & 0.419 & 8.8 & 12.3 \\ \cline{2-9}
- &  5  &  169 & 1.93 & \cellcolor{green!25}  4.52 & 20.9 & 36.4 & 1.11 & 3.44 \\ \cline{2-9}
- &  7  &  225 & 9.17 & \cellcolor{green!25}  0.551 & 8.87 & 11.6 & 5.93 & 0.0307 \\ \cline{2-9}
- &  8  &  256 & 11.0 & \cellcolor{green!25}  3.71 & 3.65 & 2.28 & 3.58 & 1.45 \\ \hline
-\multirow{4}{*}{road\_usa}  &  4  &  144 & 3.95 & \cellcolor{green!25}  7.14 & 0.19 & 0.0491 & 7.42 & 1.55 \\ \cline{2-9}
- &  5  &  169 & 5.75 & \cellcolor{green!25}  9.37 & 48.1 & 12.0 & 2.09 & 16.1 \\ \cline{2-9}
- &  7  &  225 & 3.27 & \cellcolor{green!25}  3.87 & 41.0 & 6.56 & 0.00937 & 0.128 \\ \cline{2-9}
- &  8  &  256 & 4.22 & \cellcolor{green!25}  2.11 & 3.34 & 1.79 & 1.98 & 3.05 \\ \hline
-  \end{tabular}
+\let\center\empty
+\let\endcenter\relax
+\centering
+\resizebox{.99\width}{!}{\input{table/overall_svr_model_info.tex}}
 \end{table*}
 
 
@@ -957,7 +703,7 @@ rmat\_700M4M  &  117.98  &  103.63  &  156.92  &  157.52  &  102.77  &  96.48  &
 \let\center\empty
 \let\endcenter\relax
 \centering
-\resizebox{.58\width}{!}{\input{table/mytable.tex}}
+\resizebox{.58\width}{!}{\input{table/total_error_info.tex}}
 
 
 \end{table*}
