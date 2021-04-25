@@ -587,16 +587,33 @@ these two models.
 \resizebox{.8\width}{!}{\input{table/test_mat_info.tex}}
 \end{table}
 
+\subsection{Results}
+
+We will resent two types of results, runtimes on particular matrices
+and number of MPI processes for a particular execution mode of
+SpMV. We will also present relative errors for models calculated by:
+\begin{eqnarray*}
+error =\ \frac{actual\ time - predicted\ time}{actual\ time}\times 100
+\end{eqnarray*}
 
 \section{Experimental Results}
+
+\subsection{Runtime of SpMV}
+
+Table~\ref{} present the results of the different way of executing SpMV.
+
+Looking first at the different 1D partitioning results. We can see
+that having dedicated communication patterns to only access typically
+delivers better performance than obtaining the complete
+
+
+
 \subsection{SpMV Model from Micro-Benchmark}
 \subsubsection{Random 2D-SpMV}
 Table~\ref{tab:overall-spmv-csr-2d-single} and~\ref{tab:overall-spmv-coo-2d-single} shows the overall performance of the 
 SpMV on the 2D-Partitioning model on CSR and COO storage formats respectively.  Average error for the CSR and COO formats are 
 $7.62$ and $9.16$ respectively. The error is calculate by,
-\begin{eqnarray*}
-error =\ \frac{actual\ time - predicted\ time}{actual\ time}\times 100
-\end{eqnarray*}
+
 \begin{table}[htb]
 \caption{Benchmark SpMV Model on Random CSR 2D Partitioning(on Skylake).}
 \label{tab:overall-spmv-csr-2d-single}
