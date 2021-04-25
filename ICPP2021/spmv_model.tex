@@ -361,13 +361,13 @@ y\ =\ y_1+\frac{(y_2-y_1) (r-r_1)}{r_2-r_1}
 \begin{figure}[hbt!]
   \centering
   
-  \begin{subfigure}[b]{.5\textwidth}
-    \includegraphics[width=0.48\linewidth]{figures/model_nonzero_perRow_for_particular_row_process_100.pdf}
+  \begin{subfigure}[b]{.48\linewidth}
+    \includegraphics[width=\linewidth]{figures/model_nonzero_perRow_for_particular_row_process_100.pdf}
     \label{fig:npr}
     \caption{Nonzero per row vs run time for different matrices.}
   \end{subfigure}
-  \begin{subfigure}[b]{.5\textwidth}
-    \includegraphics[width=0.48\linewidth]{figures/prediction_equation.pdf}
+  \begin{subfigure}[b]{.48\linewidth}
+    \includegraphics[width=\linewidth]{figures/prediction_equation.pdf}
     \label{fig:linearspmvmodel}
   
     \caption{Sample equation for the linear model.}
@@ -475,14 +475,14 @@ we should at least use $4\times 2=8$ instruction at a time to populate the pipel
 
 \begin{figure}[hbt!]
   \centering
-  \begin{subfigure}[b]{.5\textwidth}
-    \includegraphics[width=0.48\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_4.pdf}
+  \begin{subfigure}[b]{.48\linewidth}
+    \includegraphics[width=\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_4.pdf}
     \label{fig:mpi-skl-vec-4}
     \caption{Vector Width: 4}
   \end{subfigure}
-
-  \begin{subfigure}[b]{.5\textwidth}
-    \includegraphics[width=0.48\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_8.pdf}
+  %
+  \begin{subfigure}[b]{.48\linewidth}
+    \includegraphics[width=\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_8.pdf}
     \label{fig:mpi-skl-vec-8}
     \caption{Vector Width: 8}
   \end{subfigure}
@@ -506,14 +506,14 @@ out the cost the memory accesses for a selected architecture.
 
 \begin{figure}[hbt!]
   \centering
-  \begin{subfigure}[b]{.5\textwidth}
-    \includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_single_precision.pdf}
+  \begin{subfigure}[b]{.48\linewidth}
+    \includegraphics[width=\linewidth]{figures/stream/skylake_mpi_copy_single_precision.pdf}
     \label{fig:stream-single-copy}
     \caption{Single Precision.}
   \end{subfigure}
-
-  \begin{subfigure}[b]{.5\textwidth}
-    \includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_double_precision.pdf}
+  %
+  \begin{subfigure}[b]{.48\linewidth}
+    \includegraphics[width=\linewidth]{figures/stream/skylake_mpi_copy_double_precision.pdf}
     \label{fig:stream-double-copy}
     \caption{Double Precision.}
   \end{subfigure}
