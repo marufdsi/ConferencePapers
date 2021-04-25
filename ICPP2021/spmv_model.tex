@@ -157,7 +157,9 @@ practice.
 \subsection{Representation formats}
 
 There are many representation format designed to store matrices for
-computing SpMV.
+computing SpMV. While some representation format have been designed
+especially to optimze SpMV. CSR and COO are generic storage format
+that are used in most sparse linear algebra and graph processing.
 
 \subsubsection{Compressed Storage by Row (CSR)}
 
@@ -564,14 +566,18 @@ Infiniband. The machine uses the \texttt{Linux}. To present
 concise results all experiments are performed on 144, 169, 225 and 256 MPI processes
 allocated on 4, 5, 7 and 8 nodes respectively. The system support maximum 256 MPI processes.
 
-\subsection{Metrices}
-We collect over 90 matrices from the \textit{Florida Sparse Matrix} suit 
-and perform train and test on these matrices. We separate test matrices 
-to show the test result and the remaining matrices used for the train purpose. 
-No test matrices participate in the train process, that is how we make the 
-fair test performance. The performance of the machine learning model depend 
-on the range of the training sets. That is why we select the test matrices 
-that way that they are not out of the range of the train data sets. 
+\subsection{Matrices}
+
+All the matrices we use come from the SuiteSparse Matrix Collection
+(previously known as the \textit{Florida Sparse Matrix}
+collection)~\cite{Davis11}. We used seven matrices for our
+tests. Their properties are described in Table~\ref{something}.
+\todo{make a table with stats of the matrices and reference it.}
+
+Because the linear and SVR models require to be trained based on
+timings from real runs, we used an other 83 matrices in order to train
+these two models.
+
 
 \section{Experimental Results}
 \subsection{SpMV Model from Micro-Benchmark}
