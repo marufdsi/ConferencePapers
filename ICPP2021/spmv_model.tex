@@ -159,9 +159,16 @@ practice.
 There are many representation format designed to store matrices for
 computing SpMV.
 
-Yet
+\subsubection{Compressed Storage by Row (CSR)}
+
+\subsubection{Coordinate  (COO)}
+
+
 
 \subsection{Distributed memory exection}
+
+
+\subsubsection{2D-Uniform partitioning}
 
 In \textit{2D-Uniform partitioning},  matrices
 are partitioned into both row-wise and column-wise.  There is a choice
@@ -195,6 +202,8 @@ done using the classic methods. Each process performs its local
 multiplication. The values are then reduced within each row onto the
 diagonal process. These reduced values are then broadcast along with the
 column processes for the next iteration of the calculation.
+
+\subsubsection{1D-Row Partitioning}
 
 In \textit{1D-Row Partitioning}, matrices are split into row-wise
 only. Balancing the load between the processors and minimizing the
@@ -238,9 +247,6 @@ SpMV would benefit from the effectiveness of MPI Collectives. There is
 no point in designing a local 2D scheme since the randomized
 partitioning ensures there is little saving to be expected from
 customized communications.
-
-The local matrix stored by the nodes can be represented in a number of
-formats. We picked the two most popular formats: CSR and COO.
 
 \subsection{Modeling performance}
 
@@ -398,7 +404,7 @@ a selected computer architecture. Initially, SpMV on the distributed system can 
 \item Core Calculation: performance of the matrix-vector calculation in a MPI node.
 \item MPI Communication: communication runtime among MPI ranks(processes). 
 \end{itemize}
-\subsubsection{Core Calculation}
+\subsubsection{Instruction Cost}
 We can represent the basic SpMV by $y=y+Val*x$, which requires two floating point operation(multiply and addition). 
 So, we can say we need to calculate NNZ(number of non-zeros) times FMA(fused multiply addition) to perform SpMV.
 But, first it needs to load the data and SpMV is bound by the memory bandwidth rather than instruction. So, we 
@@ -407,6 +413,8 @@ separated the \textit{core calculation} into,
 \item Run time for FMA: $L_{FMA}\times NNZ$, where $L_{FMA}$ is the latency of a single FMA and $NNZ$ is number of non-zeros.
 \item Memory access latency: $L_{RW}$
 \end{itemize} 
+
+
 
 \paragraph{Micro Benchmark for \textit{FMA}}
 The throughput of SkylakeX is 2 instructions per cycle and the latency of FMA is 4 cycles. So there is a potential 
@@ -431,11 +439,13 @@ We can estimate the theoritical peak performance a single FMA by the following e
 P\ =\ Base\_Clock\_Frequency\times Vector\_Width\times \frac{FLOPs}{Instruction}
 \end{eqnarray*}
 The significance of the \textit{FMA} 
-latency is very few compare to the memory access latency. 
+latency is actually negligible compare to the memory access latency. 
 
-\paragraph{Micro-Benchmark for Memory Access Latency}
+\subsubsection{Memory Accesses Cost}
+
+\paragraph{Micro-Benchmark for Memory Access}
 We use the \textit{STREAM}~\cite{mccalpin1995stream} benchmark to find
-out the bandwidth of the memory access for a selected architecture.
+out the cost the memory accesses for a selected architecture.
 
 \begin{figure}[hbt!]
 	\centering
@@ -450,9 +460,9 @@ size and bandwidth of the SkylakeX processor. To pick the right
 bandwidth for a matrix-vector multiplication, we first calculate the
 size of the data. Based on the size of the data, we pick the average
 of the available immediate lower and higher point of the
-benchmark. Note that in STREAM, all memory accesses are 
+benchmark. Note that in STREAM, all memory accesses are sequential.
  
-\paragraph{Cache Pattern}
+\paragraph{Cache Access Patterns}
 In SpMV some of the arrays are traverse sequentially and some have irregular
 pattern. Table~\ref{tab:csr-spmv-2d-property} shows the memory access
 property for different matrix representation format. We can see the
@@ -478,9 +488,20 @@ of caches, and concurrent processes); but it is a simple to compute
 estimation of how irregular the memory access actually are.
 
 All the sequential data accesses and \textit{hits} of irregular
-accesses are treated as \textit{Sequential} data accesses. And all
-cache \textit{miss} in irregular accesses are treated to random data
-accesses. \todo{then we use memory altency for these?[ans: yes, Bandwidth found from STREAM Benchmark]}
+accesses are treated as \textit{Sequential} data accesses. The cost of
+these data accesses is accounted based on the predicted bandwidth to
+the core out of the STREAM benchmark. And all cache \textit{miss} in
+irregular accesses are treated to \texttt{Random} data accesses. The
+cost of these operations are accounted based on the latency of the
+memory access by the cores. The cost of these sequential and random
+access are summed.
+
+Note that this model does not capture all the complexity of modern
+system: for instance, a mix of latency bound and bandwidth bound
+memory operations can overlap especially when multiple cores access
+memory at the same time. But while one could certainly craft an
+example where the model is very inaccurate, we do not believe these
+extreme case would happen in practice.
 
 \begin{table}[htb]
 \caption{Memory Access Property for 2D-Partitioning SpMV Model(RPP=rows per process, NNZ=non-zero elements).}
@@ -501,9 +522,11 @@ y & RPP & NNZ & Floating & Sequential & Irregular  \\ \hline
 
 
 \subsubsection{Micro-Benchmark for MPI communication}
-MPI communications mostly depend on the size of the message and network topology. We build a benchmark based on the OSU-MPI-Benchmark.
-Because of the dynamics of the network topology we build a polynomial model based on the number of nodes, number of MPI ranks, message size, 
-and MPI communication type.  
+MPI communications mostly depend on the size of the message and
+network topology. We build a benchmark based on the OSU-MPI-Benchmark.
+Because of the dynamics of the network topology we build a polynomial
+model based on the number of nodes, number of MPI ranks, message size,
+and MPI communication type. \todo{What does that mean. Is that an SVR model?}
 
 \begin{comment}
 \begin{figure}[hbt!]
@@ -514,6 +537,8 @@ and MPI communication type.
 	\label{fig:osu-collectives}
 \end{figure}
 \end{comment}
+
+\subsubsection{Putting it together}
 
 Figure~\ref{fig:spmv-model-from-benchmark} shows the overall structure of the SPMV model from micro-benchmark.
 
