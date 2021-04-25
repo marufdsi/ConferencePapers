@@ -34,7 +34,7 @@ Processing (ICPP)}{August 9-12, 2021}{Chicago, Illinois, USA}
 \algrenewcommand\algorithmicindent{0.9em}%
 \usepackage{soul}
 \usepackage{xspace}
-\usepackage{subfigure}
+\usepackage{subcaption}
 \usepackage[group-separator={,}, group-minimum-digits=4]{siunitx}
 \usepackage{makecell}
 \usepackage{multirow}
@@ -156,12 +156,43 @@ practice.
 
 \subsection{Representation formats}
 
-There are many representation format designed to store matrices for
-computing SpMV. While some representation format have been designed
-especially to optimze SpMV. CSR and COO are generic storage format
-that are used in most sparse linear algebra and graph processing.
+There are many representation format designed to store sparse matrices
+for computing SpMV. While some representation format have been
+designed especially to optimze SpMV. CSR and COO are generic storage
+format that are used in most sparse linear algebra and graph
+processing.
+
+All the encoding of sparse matrices essentially aim at avoiding to
+represent the zeros in matrices and only represent the non-zer values
+in the matrix.
 
 \subsubsection{Compressed Storage by Row (CSR)}
+
+The Compressed Storage by Row format represents a matrix with three
+arrays: \texttt{rowA}, \texttt{colA}, and \texttt{valA}. 
+
+\begin{figure}
+  \begin{subfigure}[b]{4em}
+    $\begin{pmatrix}
+      1 & 2 & 3 & 0 & 0 \\
+      0 & 0 & 4 & 5 & 6 \\
+      0 & 2 & 0 & 0 & 0 \\
+      1 & 0 & 0 & 0 & 3 \\
+      0 & 0 & 3 & 4 & 0 \\
+    \end{pmatrix}$
+
+    \caption{A matrix}
+  \end{subfigure}
+  
+  \begin{subfigure}[b]{4em}
+    colA = [ 0, 1, 2, 2, 3, 4, 1, 0, 4, 2, 3 ] \\
+    
+    valA = [ 1, 2, 3, 4, 5, 6, 2, 1, 3, 3, 4 ]
+
+    \caption{CSR Representation}
+  \end{subfigure}
+\end{figure}
+
 
 \subsubsection{Coordinate  (COO)}
 
@@ -326,13 +357,26 @@ subject matrix using the following equation,
 y\ =\ y_1+\frac{(y_2-y_1) (r-r_1)}{r_2-r_1}
 \end{array}
 \end{equation*}
+
 \begin{figure}[hbt!]
-\centering
-\subfigure[Nonzero per row vs run time for different matrices.]{\includegraphics[width=0.48\linewidth]{figures/model_nonzero_perRow_for_particular_row_process_100.pdf}\label{fig:npr}}
-\subfigure[Sample equation for the linear model.]{\includegraphics[width=0.48\linewidth]{figures/prediction_equation.pdf}\label{fig:linearspmvmodel}}
-\caption{Linear relationship between nonzero per row and run time for the SpMV on the uniform 2d-Partitioning.}
-\label{fig:ov-linear-model}
+  \centering
+  
+  \begin{subfigure}[b]{.5\textwidth}
+    \includegraphics[width=0.48\linewidth]{figures/model_nonzero_perRow_for_particular_row_process_100.pdf}
+    \label{fig:npr}
+    \caption{Nonzero per row vs run time for different matrices.}
+  \end{subfigure}
+  \begin{subfigure}[b]{.5\textwidth}
+    \includegraphics[width=0.48\linewidth]{figures/prediction_equation.pdf}
+    \label{fig:linearspmvmodel}
+  
+    \caption{Sample equation for the linear model.}
+  \end{subfigure}
+
+  \caption{Linear relationship between nonzero per row and run time for the SpMV on the uniform 2d-Partitioning.}
+  \label{fig:ov-linear-model}
 \end{figure}
+
 Figure~\ref{fig:linearspmvmodel} shows the example for the matrix with $250000$ average rows per process and 32 nonzero per row. 
 Here, possible $r_1$ and $r_2$ equations are available for rows $200000$ and $310000$. The figure reflects the prediction mechanism of our 
 system. 
@@ -428,13 +472,24 @@ registers. We can populate the pipeline by using sufficient ampunt of work. By v
 number of fused-multiply-addition calculation, we can find out the performance limitation. From the information of the 
 processors, we can say that 4 cycles required for \textit{FMA} and the throughput of the FMA is 2 instruction per cycle, that means 
 we should at least use $4\times 2=8$ instruction at a time to populate the pipeline.
+
 \begin{figure}[hbt!]
-	\centering
-	\subfigure[Vector Width: 4]{\includegraphics[width=0.48\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_4.pdf}		\label{fig:mpi-skl-vec-4}}
-	\subfigure[Vector Width: 8]{\includegraphics[width=0.48\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_8.pdf}		\label{fig:mpi-skl-vec-8}}
-	\caption{Skylake: (MPI)Roofline model for bandwidth for FMA operation}
-	\label{fig:mpi-skl-fma}
+  \centering
+  \begin{subfigure}[b]{.5\textwidth}
+    \includegraphics[width=0.48\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_4.pdf}
+    \label{fig:mpi-skl-vec-4}
+    \caption{Vector Width: 4}
+  \end{subfigure}
+
+  \begin{subfigure}[b]{.5\textwidth}
+    \includegraphics[width=0.48\linewidth]{figures/fma/skylake_mpi_fma_roofline_model_for_vec_8.pdf}
+    \label{fig:mpi-skl-vec-8}
+    \caption{Vector Width: 8}
+  \end{subfigure}
+  \caption{Skylake: (MPI)Roofline model for bandwidth for FMA operation}
+  \label{fig:mpi-skl-fma}
 \end{figure}
+
 Figure~\ref{fig:mpi-skl-fma} shows the roofline model of the \textit{FMA} on SkylakeX processor. 
 We can estimate the theoritical peak performance a single FMA by the following equation,
 \begin{eqnarray*}
@@ -450,11 +505,21 @@ We use the \textit{STREAM}~\cite{mccalpin1995stream} benchmark to find
 out the cost the memory accesses for a selected architecture.
 
 \begin{figure}[hbt!]
-	\centering
-	\subfigure[Single Precision.]{\includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_single_precision.pdf}		\label{fig:stream-single-copy}}
-	\subfigure[Double Precision.]{\includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_double_precision.pdf}		\label{fig:stream-double-copy}}
-	\caption{Single and double precision memory access bandwidth on Skylake processor.}
-	\label{fig:stream-copy-bandwidth}
+  \centering
+  \begin{subfigure}[b]{.5\textwidth}
+    \includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_single_precision.pdf}
+    \label{fig:stream-single-copy}
+    \caption{Single Precision.}
+  \end{subfigure}
+
+  \begin{subfigure}[b]{.5\textwidth}
+    \includegraphics[width=0.48\linewidth]{figures/stream/skylake_mpi_copy_double_precision.pdf}
+    \label{fig:stream-double-copy}
+    \caption{Double Precision.}
+  \end{subfigure}
+    
+  \caption{Single and double precision memory access bandwidth on Skylake processor.}
+  \label{fig:stream-copy-bandwidth}
 \end{figure}
 
 Figure~\ref{fig:stream-copy-bandwidth} shows the relation between data
