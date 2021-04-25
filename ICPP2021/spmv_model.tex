@@ -614,47 +614,12 @@ Table~\ref{tab:overall-spmv-csr-2d-single} and~\ref{tab:overall-spmv-coo-2d-sing
 SpMV on the 2D-Partitioning model on CSR and COO storage formats respectively.  Average error for the CSR and COO formats are 
 $7.62$ and $9.16$ respectively. The error is calculate by,
 
-\begin{table}[htb]
-\caption{Benchmark SpMV Model on Random CSR 2D Partitioning(on SkylakeX).}
-\label{tab:overall-spmv-csr-2d-single}
-\let\center\empty
-\let\endcenter\relax
-\centering
-\resizebox{.8\width}{!}{\input{table/bench_model_csr_2d_info.tex}}
-
-\end{table}
-
-\begin{table}[htb]
-\caption{Benchmark SpMV Model on Random COO 2D Partitioning(on SkylakeX).}
-\label{tab:overall-spmv-coo-2d-single}
-\let\center\empty
-\let\endcenter\relax
-\centering
-\resizebox{.8\width}{!}{\input{table/bench_model_coo_2d_info.tex}}
-\end{table}
 
 \subsubsection{Local 1D-SpMV}
 Table~\ref{tab:overall-spmv-csr-lk-single} and~\ref{tab:overall-spmv-coo-lk-single} shows the overall performance of the Local 1D-Partitioning 
 SpMV model on CSR and COO storage formats respectively.  Average error for the CSR and COO formats are 
 $21.61$ and $19.52$ respectively. 
 
-\begin{table}[htb]
-\caption{Benchmark SpMV Model on Local CSR 1D-Row Partitioning(on SkylakeX).}
-\label{tab:overall-spmv-csr-lk-single}
-\let\center\empty
-\let\endcenter\relax
-\centering
-\resizebox{.8\width}{!}{\input{table/bench_model_local_csr_1d_info.tex}}
-\end{table}
-
-\begin{table}[htb]
-\caption{Benchmark SpMV Model on Local COO 1D-Row Partitioning(on SkylakeX).}
-\label{tab:overall-spmv-coo-lk-single}
-\let\center\empty
-\let\endcenter\relax
-\centering
-\resizebox{.8\width}{!}{\input{table/bench_model_local_csr_1d_info.tex}}
-\end{table}
 
 
 \subsubsection{Local 1D-SpMV}
@@ -662,23 +627,6 @@ Table~\ref{tab:overall-spmv-csr-gk-single} and~\ref{tab:overall-spmv-coo-gk-sing
 SpMV model on CSR and COO storage formats respectively.  Average error for the CSR and COO formats are 
 $13.63$ and $25.3$ respectively. 
 
-\begin{table}[htb]
-\caption{Benchmark SpMV Model on Global CSR 1D-Row Partitioning(on SkylakeX).}
-\label{tab:overall-spmv-csr-gk-single}
-\let\center\empty
-\let\endcenter\relax
-\centering
-\resizebox{.8\width}{!}{\input{table/bench_model_global_csr_1d_info.tex}}
-\end{table}
-
-\begin{table}[htb]
-\caption{Benchmark SpMV Model on Global COO 1D-Row Partitioning(on SkylakeX).}
-\label{tab:overall-spmv-coo-gk-single}
-\let\center\empty
-\let\endcenter\relax
-\centering
-\resizebox{.8\width}{!}{\input{table/bench_model_global_coo_1d_info.tex}}
-\end{table}
 
 \subsection{Polynomial SVR Model}
 Table~\ref{tab:dynamic-svr-spmv-performance} shows the performance of the dynamic SVR model for the SpMV 
@@ -699,23 +647,7 @@ for the COO storage format.
 \subsection{Linear Model}
 Table~\ref{tab:overall-spmv-csr-2d-linear-single} and~\ref{tab:overall-spmv-coo-2d-linear-single} show the performance of the 
 linear model on the CSR and COO 2D-Partitioning, where the average errors are recorded $14.02$ and $11.53$ respectively. 
-\begin{table}[htb]
-\caption{Linear model performance on CSR 2D-Partitioning(on SkylakeX).}
-\label{tab:overall-spmv-csr-2d-linear-single}
-\let\center\empty
-\let\endcenter\relax
-\centering
-\resizebox{.8\width}{!}{\input{table/linear_csr_2d_info.tex}}
-\end{table}
 
-\begin{table}[htb]
-\caption{Linear model performance on COO 2D-Partitioning(on SkylakeX).}
-\label{tab:overall-spmv-coo-2d-linear-single}
-\let\center\empty
-\let\endcenter\relax
-\centering
-\resizebox{.8\width}{!}{\input{table/linear_coo_2d_info.tex}}
-\end{table}
 
 \section{Conclusion}
 In this paper, we provide three SpMV models to predict the run time of the
@@ -728,14 +660,7 @@ algorithms that heavily relies on the performance of the SpMV, such as
 \textit{page rank}. The model may need to be adjusted to predict the
 correct graph representation format.
 
-\begin{table*}
- \caption{Dynamic SVR performance model for SpMV on SkylakeX.}
- \label{tab:dynamic-svr-spmv-performance}
-\let\center\empty
-\let\endcenter\relax
-\centering
-\resizebox{.99\width}{!}{\input{table/overall_svr_model_info.tex}}
-\end{table*}
+
 
 
 \begin{table*}
@@ -749,7 +674,7 @@ correct graph representation format.
 
 
 \begin{table*}
-\caption{Actual Run Time of All SpMV model  on SkylakeX.}
+\caption{Actual Run Time of All SpMV execution.}
 \label{tab:actual_time_table}
 \let\center\empty
 \let\endcenter\relax
@@ -758,7 +683,7 @@ correct graph representation format.
 \end{table*}
 
 \begin{table*}
-\caption{Overall All SpMV model performance  on SkylakeX.}
+\caption{All SpMV prediction model performance.}
 \label{tab:performance_table}
 \let\center\empty
 \let\endcenter\relax
