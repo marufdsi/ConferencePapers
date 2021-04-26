@@ -683,6 +683,12 @@ these two models.
 \resizebox{.8\width}{!}{\input{table/test_mat_info.tex}}
 \end{table}
 
+We also generated three larger matrices using the R-MAT model~\cite{chakrabarti2004r}. We
+generated the R-MAT matrices using parameter $a=0.33$, $b=0.33$ and
+$c=0.33$. In the name of the matrix the first numerical value in the
+name represent the total number of edges and the second value
+represent the number of rows.
+
 \subsection{Results}
 
 We will resent two types of results, runtimes on particular matrices
@@ -711,16 +717,31 @@ exchange communications. The global variant uses MPI efficient
 collective but communicates the entire vector to each node which is
 more costly overall.
 
-\todo{comment on RMAT 1d global VS 1d local}
-It is true that local 1D partitioning perform better for all the graphs mentioned in the table~\ref{tab:actual_time_table}. 
-But it is not always true, we extend our experiment for the synthesis graphs like R-MAT~\cite{chakrabarti2004r}. 
-Table~\ref{tab:rmat-actual_time_table} shows the actual run time for some synthesis graph. We generated all the 
-R-MAT graph using parameter $a=0.33$, $b=0.33$ and $c=0.33$ that means outdegree distribution $(a+b)$ will be 0.66 
-as well the same as indegree distribution$(a+c)$. First numerical value in the name represent the total number of edges and the 
-second value represent the number of rows. From the table~\ref{tab:rmat-actual_time_table}, we can see 2D-Partitioning SpMV 
-outperform the other two model. So, all three models have significant usage for different type matrices and that is why we 
-system the prediction model for all three models.
-\todo{comment on 2D partitioning well partitioned/rmat}
+While local 1D partitioning perform better than the global exection
+for all the matrices we picked and are listed
+table~\ref{tab:actual_time_table}, it is because the global
+communication of global 1D shares data that is not used. Indeed the
+matrices of Table~\ref{tab:actual_time_table} are well
+partitionable. But we expect that matrices that can not be well
+partitioned would not see such poor performance when using the global
+1D method. The performance of Global1D execution on R-MAT matrices,
+which can not be well partitioned,
+(Table~\ref{tab:rmat-actual_time_table}) is about the same as local
+1D.
+
+Similar reasons explains the performance of 2D partitioning methods.
+The performance of SpMV on R-MAT is better on 2D uniform partitioning
+than using 1D partitioning. Indeed the matrix is not well
+partitionable, so METIS partitioning can not minimize the
+communication of a 1D partitioning and suffers from load imbalance. On
+the other hand, 2D partitioning will balance the load thanks to its
+random row and column permutation. And the 2D decomposition of the
+matrix provides more efficient communication patterns.
+
+On the matrices of Table~\ref{tab:actual_time_table}, the random
+permutation of rows and columns breaks all locality in the matrix and
+cause communications that were not necessary in the 1D local
+execution.
 
 \subsection{Accuracy of performance models}
 
@@ -825,7 +846,7 @@ correct graph representation format.
 \end{table*}
 
 \begin{table*}
-\caption{All SpMV prediction model performance.}
+\caption{All SpMV prediction model performance. \todo{columns should be ordered like in the previous tables. Any chance we will get the models for linear and benchmark based?}}
 \label{tab:performance_table}
 \let\center\empty
 \let\endcenter\relax
