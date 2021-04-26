@@ -818,52 +818,6 @@ for the linear model become large.
 
 
 
-\section{Discussion}
-\label{sec:discussion}
-
-The micro-benchmarking based model and the SVR model are accurate
-enough to predict the correct configuration of the system for a
-particular matrix in most cases. When an error occurs, the loss of
-performance for not picking the right model is usually under 10\%.
-
-We believe there is more potential in the fine modeling of performance
-of the micro-benchmark based model over the SVR model. The SVR model
-is fairly expensive to train. It requires to build a different model
-of the problem for each hardware configuration. The trained model is
-different or 256 MPI processes than it is 225 processes. That means
-each new hardware configuration needs to reexecute SpMV for all the
-training matrices across all execution configurations. This is not a
-scalable way to predict performance.
-
-On the other hand, the micro-benchmark based model only requires to
-run classical benchmark for the platform which are not specific to
-SpMV. In other words, the cost of this model does not scale with the
-number of hardware configuration or execution algorithms for SpMV.
-
-Also, the SVR based model is hard to interpret. Once the model is
-trained, even if it is accurate, the only thing we get is a third
-degree polynomial. One can not easily pinpoint from the model why the
-execution get the time it gets.
-
-However, the finer model based on micro-benchmarks provides a direct
-explanation of the runtime of the algorithm. One can easily understand
-from the model how the runtime is formed. This can tell us for a
-particular matrix whether the bottleneck is in the memory subsystem,
-or in the MPI communication. This type of model is easier to explain.
-
-
-
-\section{Conclusion}
-In this paper, we provide three SpMV models to predict the run time of the
-SpMV on the \textit{Uniform 2D-Partitioning}, \textit{GK-SpMV} and \textit{LK-SpMV}). 
-The performance models can predict the run time accurately enough to identify the
-optimal strategy to compute SpMV. Our models consider the matrix structure and partitioning information to 
-predict the best possible communication strategy to perform
-\textit{SpMV}. These models can be useful for the other graph
-algorithms that heavily relies on the performance of the SpMV, such as
-\textit{page rank}. The model may need to be adjusted to predict the
-correct graph representation format.
-
 
 \begin{table*}
 \caption{Actual Run Time of All SpMV execution.}
@@ -901,6 +855,55 @@ correct graph representation format.
 \centering
 \resizebox{.58\width}{!}{\input{table/rmat_total_error_info.tex}}
 \end{table*}
+
+
+
+\section{Discussion}
+\label{sec:discussion}
+
+The micro-benchmarking based model and the SVR model are accurate
+enough to predict the correct configuration of the system for a
+particular matrix in most cases. When an error occurs, the loss of
+performance for not picking the right model is usually under 10\%.
+
+We believe there is more potential in the fine modeling of performance
+of the micro-benchmark based model over the SVR model. The SVR model
+is fairly expensive to train. It requires to build a different model
+of the problem for each hardware configuration. The trained model is
+different or 256 MPI processes than it is 225 processes. That means
+each new hardware configuration needs to reexecute SpMV for all the
+training matrices across all execution configurations. This is not a
+scalable way to predict performance.
+
+On the other hand, the micro-benchmark based model only requires to
+run classical benchmark for the platform which are not specific to
+SpMV. In other words, the cost of this model does not scale with the
+number of hardware configuration or execution algorithms for SpMV.
+
+Also, the SVR based model is hard to interpret. Once the model is
+trained, even if it is accurate, the only thing we get is a third
+degree polynomial. One can not easily pinpoint from the model why the
+execution get the time it gets.
+
+However, the finer model based on micro-benchmarks provides a direct
+explanation of the runtime of the algorithm. One can easily understand
+from the model how the runtime is formed. This can tell us for a
+particular matrix whether the bottleneck is in the memory subsystem,
+or in the MPI communication. This type of model is easier to explain.
+
+
+
+\section{Conclusion}
+In this paper, we provide three SpMV models to predict the run time of
+the SpMV on using two matrix reprensentation and three distributed
+memory strategoes.  Two of the performance models can predict the run
+time accurately enough to identify the optimal strategy to compute
+SpMV. While the SVR model provides usually better accuracy in the
+prediction of the runtime, its training is computationally expensive
+and the model does not provide any insight of why the performance is
+the way it is. On the other hand, the microbenchmark based model
+provdes explainable prediction, that only require classic performance
+benchmark of the architecture.
 
 
 \bibliographystyle{unsrt}
