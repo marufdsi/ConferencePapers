@@ -74,7 +74,7 @@ Processing (ICPP)}{August 9-12, 2021}{Chicago, Illinois, USA}
 \begin{abstract}
 Many applications rely on basic sparse linear algebra operations from numerical solvers to graph analysis 
 algorithms. Yet, the performance of these operations is still reasonably unknown. Users and practitioners 
-rely on the rule of thumb understanding of what typically works best for some application domain.
+rely on a rule of thumb understanding of what typically works best for some application domain.
 \\ 
 This paper aims at providing an overall framework for the distributed system to think about the performance 
 of sparse applications. We use the sparse matrix-vector(SpMV) multiplication as the representative of the 
@@ -116,7 +116,7 @@ to ensure good load balance and to minimize \textit{MPI communications}~\cite{de
 
 A common problem is to choose which of these many approaches to use.
 Often, picking the right approach to execute an application based on
-SpMV relies on the rule of thumbs. Ideally when deploying an
+SpMV relies on a rule of thumbs. Ideally when deploying an
 application, the user should not have to pick a configuration, the
 systems should be able to pick a good configuration automatically; or
 at least provide a set of likely good candidate configuration. We
