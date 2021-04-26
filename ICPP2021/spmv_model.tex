@@ -717,6 +717,33 @@ more costly overall.
 
 \subsection{Accuracy of performance models}
 
+The linear model performs erratically on most of the testing data
+set. And we only present the data for the 2D partitioned methods, the
+model often exhibits an error higher than 15\%. The linear model can
+not capture the behavior of the methods based on 1d partitioning and
+is often predicts an order of magnitude away from the actual runtime
+(error not shown).
+
+The SVR model captures pretty well the performance of 2d partitioning
+methods with errors of prediction below 15\% on most instances and
+usually below 10\%. 2D partitioning with uniform permutation of rows
+and columns provides the regularity in the dataset that SVRs can
+easily capture.
+
+Though the SVR model has moderate accuracy on 1D partitioning
+model. This stems from the fact that the features of the SVR model do
+not capture well the quality of the partitioning and the complexity of
+the communication patterns.
+
+The model based off micro benchmark overall performs the best. The
+method using 1D partitioning with custom messages, Local 1D, is fairly
+well models. All the instances are modeled within a 15\% of error and
+often within 10\%. The model is accurate because the execution of SpMV
+is carefully modeled and the communication pattern are also known to
+the model.
+
+The 2D partitioning execution are also well modeled with error usually
+below 10\%
 
 
 \section{Discussion}
@@ -758,7 +785,7 @@ correct graph representation format.
 \end{table*}
 
 \begin{table*}
-\caption{All SpMV prediction model performance.}
+\caption{All SpMV prediction model performance. \todo{can we have harmonic mean of error at the bottom for each model?}}
 \label{tab:performance_table}
 \let\center\empty
 \let\endcenter\relax
