@@ -743,8 +743,15 @@ is carefully modeled and the communication pattern are also known to
 the model.
 
 The 2D partitioning execution are also well modeled with error usually
-below 10\%
+below 10\%. The error on the Global 1D executio is much higher. This
+is due to the micro benchmark based model to not accurately predict
+all gather collective. This MPI collective is fairly hard to model
+accurately as the underlying communication algorithms can configure is
+very different way depending on the configuration of the system. The
+2D partitioning also uses collective but in smaller communicators
+which makes them easier to model.
 
+\todo{RMAT discussions}
 
 \section{Discussion}
 
