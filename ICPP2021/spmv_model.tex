@@ -623,8 +623,8 @@ y & RPP & NNZ & Floating & Sequential & Irregular  \\ \hline
 MPI communications mostly depend on the size of the message and
 network topology. We build a benchmark based on the OSU-MPI-Benchmark.
 Because of the dynamics of the network topology we build a polynomial
-model based on the number of nodes, number of MPI ranks, message size,
-and MPI communication type. \todo{What does that mean. Is that an SVR model?}
+model using an SVR based on the number of nodes, number of MPI ranks,
+message size, and MPI communication type.
 
 \begin{comment}
 \begin{figure}[hbt!]
@@ -638,7 +638,9 @@ and MPI communication type. \todo{What does that mean. Is that an SVR model?}
 
 \subsubsection{Putting it together}
 
-Figure~\ref{fig:spmv-model-from-benchmark} shows the overall structure of the SPMV model from micro-benchmark.
+Figure~\ref{fig:spmv-model-from-benchmark} shows the overall structure
+of the SPMV model from micro-benchmark.  The three components,
+instructions, memory, and MPI communication are added together.
 
 \begin{figure}[hbt!]
 	\centering
@@ -749,6 +751,9 @@ execution.
 
 \subsection{Accuracy of performance models}
 
+Table~\ref{tab:performance_table} presents the relative error in
+prediction made by the different models.
+
 The linear model performs erratically on most of the testing data
 set. And we only present the data for the 2D partitioned methods, the
 model often exhibits an error higher than 15\%. The linear model can
@@ -760,33 +765,38 @@ The SVR model captures pretty well the performance of 2d partitioning
 methods with errors of prediction below 15\% on most instances and
 usually below 10\%. 2D partitioning with uniform permutation of rows
 and columns provides the regularity in the dataset that SVRs can
-easily capture.
+easily capture. The geometric mean error on 2D partitioning is below
+5\% on both matrix representation.
 
-Though the SVR model has moderate accuracy on 1D partitioning
-model. This stems from the fact that the features of the SVR model do
-not capture well the quality of the partitioning and the complexity of
-the communication patterns.
+Though the SVR model has moderate accuracy on 1D partitioning model
+with a geometric mean error of 9\%. This stems from the fact that the
+features of the SVR model do not capture well the quality of the
+partitioning and the complexity of the communication patterns.
 
 The model based off micro benchmark overall performs the best. The
 method using 1D partitioning with custom messages, Local 1D, is fairly
-well models. All the instances are modeled within a 15\% of error and
-often within 10\%. The model is accurate because the execution of SpMV
-is carefully modeled and the communication pattern are also known to
-the model.
+well modeled. All the instances are modeled within a 15\% of error and
+often within 10\%. The geometric mean error are 5.3\% and 3.7\% on CSR
+and COO matrix representations. The model is accurate because the
+execution of SpMV is carefully modeled and the communication pattern
+are also known to the model.
 
 The 2D partitioning execution are also well modeled with error usually
-below 10\%. The error on the Global 1D execution is much higher. This
-is due to the micro benchmark based model to not accurately predict
-all gather collective. This MPI collective is fairly hard to model
-accurately as the underlying communication algorithms can configure 
-very differently way depending on the system state. The
-2D partitioning also uses collective but in smaller communicators
-which makes them easier to model.
+below 10\% and a geometric mean error of 3\% and 6\%. The error on the
+Global 1D execution is much higher (geometric mean of 9\% and
+22\%). This is due to the micro benchmark based model to not
+accurately predict all gather collective. This MPI collective is
+fairly hard to model accurately as the underlying communication
+algorithms can configure very differently way depending on the system
+state. The 2D partitioning also uses collective but in smaller
+communicators which makes them easier to model.
 
 The SVR model provides acceptable accuracy in its prediction of the
 R-MAT SpMV performance.
 
-\todo{accuracy of micro benchmark based model}
+\todo{accuracy of micro benchmark based model on R-MAT}
+
+
 
 
 \section{Discussion}
