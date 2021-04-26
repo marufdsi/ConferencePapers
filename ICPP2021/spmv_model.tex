@@ -607,7 +607,7 @@ extreme case would happen in practice.
 \centering
 \begin{tabular}[c]{| l | c | c | c | c | c |}
 \hline
-\multirow{2}{*}{Array} & \multicolumn{2}{ | c |}{Elements Size} & \multirow{2}{*}{Data Type} & \multicolumn{2}{ | c |}{Access Type} \\ \cline{2-3} \cline{5-6}
+\multirow{2}{*}{Array} & \multicolumn{2}{ | c |}{\#Accesses} & \multirow{2}{*}{Data Type} & \multicolumn{2}{ | c |}{Access Type} \\ \cline{2-3} \cline{5-6}
   &  CSR & COO  & &  CSR & COO \\ \hline
 rowA & 2$\times$RPP & NNZ & Integer & Sequential & Sequential \\ \hline
 colA & NNZ & NNZ & Integer & Sequential & Sequential  \\ \hline
@@ -675,7 +675,7 @@ timings from real runs, we used an other 83 matrices in order to train
 these two models.
 
 \begin{table}[htb]
-\caption{Properties of the test matrices.}
+\caption{Properties of the test matrices.\todo{can you add average degree?}}
 \label{tab:test_mat_info}
 \let\center\empty
 \let\endcenter\relax
@@ -696,53 +696,19 @@ error =\ \frac{actual\ time - predicted\ time}{actual\ time}\times 100
 
 \subsection{Runtime of SpMV}
 
-Table~\ref{} present the results of the different way of executing SpMV.
+Table~\ref{tab:actual_time_table} present the results of the different way of executing SpMV.
 
 Looking first at the different 1D partitioning results. We can see
 that having dedicated communication patterns to only access typically
-delivers better performance than obtaining the complete
+delivers better performance than obtaining the complete.
+
+\subsection{Accuracy of performance models}
 
 
 
-\subsection{SpMV Model from Micro-Benchmark}
-\subsubsection{Random 2D-SpMV}
-Table~\ref{tab:overall-spmv-csr-2d-single} and~\ref{tab:overall-spmv-coo-2d-single} shows the overall performance of the 
-SpMV on the 2D-Partitioning model on CSR and COO storage formats respectively.  Average error for the CSR and COO formats are 
-$7.62$ and $9.16$ respectively. The error is calculate by,
+\section{Discussion}
 
 
-\subsubsection{Local 1D-SpMV}
-Table~\ref{tab:overall-spmv-csr-lk-single} and~\ref{tab:overall-spmv-coo-lk-single} shows the overall performance of the Local 1D-Partitioning 
-SpMV model on CSR and COO storage formats respectively.  Average error for the CSR and COO formats are 
-$21.61$ and $19.52$ respectively. 
-
-
-
-\subsubsection{Local 1D-SpMV}
-Table~\ref{tab:overall-spmv-csr-gk-single} and~\ref{tab:overall-spmv-coo-gk-single} shows the overall performance of the Global 1D-Partitioning 
-SpMV model on CSR and COO storage formats respectively.  Average error for the CSR and COO formats are 
-$13.63$ and $25.3$ respectively. 
-
-
-\subsection{Polynomial SVR Model}
-Table~\ref{tab:dynamic-svr-spmv-performance} shows the performance of the dynamic SVR model for the SpMV 
-and the prediction from the polynomial SVR model for two different
-graph storage formats on each algorithm. The column \textit{Pred}
-represents the predicted run time from the SVR model and the
-\textit{Actual} represents the real run time of the SpMV. A green cell of  
-Table~\ref{tab:dynamic-svr-spmv-performance}, represents a correct prediction of our
-models; while a red cell represents that our models predicted the best
-strategy incorrectly and storage format incorrectly. 
-
-The average error for uniform 2D-Partitioning are $9.19$ and $5.27$ for
-CSR and COO representation respectively.  The model gives $9.86$ and
-$6.55$ average error for the G1DR on CSR and COO format
-respectively. The average error for L1DR is $14.15$ for CSR and $13.22$
-for the COO storage format.
-
-\subsection{Linear Model}
-Table~\ref{tab:overall-spmv-csr-2d-linear-single} and~\ref{tab:overall-spmv-coo-2d-linear-single} show the performance of the 
-linear model on the CSR and COO 2D-Partitioning, where the average errors are recorded $14.02$ and $11.53$ respectively. 
 
 
 \section{Conclusion}
@@ -761,7 +727,7 @@ correct graph representation format.
 
 \begin{table*}
 \caption{Performance of the SVR SpMV model on RMAT matrices(on SkylakeX).}
-\label{tab:performance_table}
+\label{tab:performance_table_rmat}
 \let\center\empty
 \let\endcenter\relax
 \centering
