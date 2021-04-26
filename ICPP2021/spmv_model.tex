@@ -801,8 +801,17 @@ algorithms can configure very differently way depending on the system
 state. The 2D partitioning also uses collective but in smaller
 communicators which makes them easier to model.
 
-The SVR model provides acceptable accuracy in its prediction of the
-R-MAT SpMV performance.
+Table~\ref{tab:performance_table_rmat} shows overall performance on the 
+R-MAT matrices. The structure of the RMAT maintain the power low and more unstructured 
+than real-world matrices. Linear model predict the run time based on the 
+matrix row size  and non-zero per row. The average error of the linear model 
+for the R-MAT data is around 32\%. The main reason behind this this error is the 
+density of the matrices. As we can see All R-MAT matrices are highly dense compare 
+to the real-world test matrices. We build up our matrices by varying non-zero per row 
+by the multiply of $2(1,2,4, 8, 16, 32, 64, 128$, so when the test cases are more 
+dense the angle between two candidate row for the linear model become large. 
+SVR model shows great result for the R-MAT, the average error for the SVR model is around 8\%. 
+Model from the benchmark shows average error around 18\%.
 
 \todo{accuracy of micro benchmark based model on R-MAT}
 
