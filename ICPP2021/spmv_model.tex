@@ -72,22 +72,24 @@ Processing (ICPP)}{August 9-12, 2021}{Chicago, Illinois, USA}
 \email{esaule@uncc.edu}
 
 \begin{abstract}
-  \todo{update abstract}
-Many applications rely on basic sparse linear algebra operations from
+ Many applications rely on basic sparse linear algebra operations from
 numerical solvers to graph analysis algorithms. Yet, the performance
 of these operations is still reasonably unknown. Users and
 practitioners rely on a rule of thumb understanding of what typically
 works best for some application domain.
  
-This paper aims at providing an overall framework for the distributed
-system to think about the performance of sparse applications. We use
-the sparse matrix-vector(SpMV) multiplication as the representative of
-the experiments. We model the performance of multiple SpMV
-implementations on distributed systems.  We model the performance of
-different modes of execution of SpMV using linear and polynomial
-regression models for a distributed system.  The models enable us to
-predict how to partition and represent the sparse matrix to optimize
-the performance of iterated SpMV on a cluster with 225 cores.
+This paper aims at modeling the performance of sparse applications and
+we use the sparse matrix-vector (SpMV) multiplication operation as a
+case study. We model the performance of six SpMV implementations on
+distributed systems using 2 matrix representation formats and 3
+distributed memory strategy.
+
+We build three models to predict the runtime of the SpMV
+implementations: a linear model, an Support Vector Regression model,
+and a model based of microbenchmarks. We evaluate the models on
+multiple matrix and number of MPI processes. Our evaluation show
+thatwhile the SVR model may provide better accuracy of the prediction,
+the microbenchmark based model is easier to train and easier to interpret.
 \end{abstract}
 %
 %%
