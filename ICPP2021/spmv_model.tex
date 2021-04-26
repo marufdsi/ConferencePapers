@@ -103,7 +103,8 @@ scientific applications~\cite{gleich2015pagerank, saad2003iterative,
 age with the popularization of departmental clusters to support these
 scientific and engineering applications.  Many different approaches
 have been proposed to improve \textit{SpMV}. Just considering single
-node efforts leads to stream of storage format and optimizations. \todo{put a bunch of storage format papers}
+node efforts leads to stream of storage formats~\cite{ashari2014fast, ashari2014efficient, baskaran2009optimizing, bell2009implementing, buluc2011reduced, bulucc2009parallel, choi2010model, deng2009taming, garland2008sparse, greathouse2014efficient, kourtis2010exploiting, li2013smat, li2013gpu, liu2013efficient, su2012clspmv, tang2015optimizing, vuduc2005oski, williams2007optimization, yan2014yaspmv} and optimizations. 
+%\todo{put a bunch of storage format papers}
 \\
 To perform sparse matrix-vector multiplication(\textit{SpMV}) on
 distributed systems, the matrix is usually partitioned into multiple
@@ -667,7 +668,7 @@ All the matrices we use come from the SuiteSparse Matrix Collection
 (previously known as the \textit{Florida Sparse Matrix}
 collection)~\cite{Davis11}. We used seven matrices for our
 tests. Their properties are described in Table~\ref{tab:test_mat_info}.
-\todo{make a table with stats of the matrices and reference it.}
+%\todo{make a table with stats of the matrices and reference it.}
 
 Because the linear and SVR models require to be trained based on
 timings from real runs, we used an other 83 matrices in order to train
