@@ -712,7 +712,14 @@ collective but communicates the entire vector to each node which is
 more costly overall.
 
 \todo{comment on RMAT 1d global VS 1d local}
-
+It is true that local 1D partitioning perform better for all the graphs mentioned in the table~\ref{tab:actual_time_table}. 
+But it is not always true, we extend our experiment for the synthesis graphs like R-MAT~\cite{chakrabarti2004r}. 
+Table~\ref{tab:rmat-actual_time_table} shows the actual run time for some synthesis graph. We generated all the 
+R-MAT graph using parameter $a=0.33$, $b=0.33$ and $c=0.33$ that means outdegree distribution $(a+b)$ will be 0.66 
+as well the same as indegree distribution$(a+c)$. First numerical value in the name represent the total number of edges and the 
+second value represent the number of rows. From the table~\ref{tab:rmat-actual_time_table}, we can see 2D-Partitioning SpMV 
+outperform the other two model. So, all three models have significant usage for different type matrices and that is why we 
+system the prediction model for all three models.
 \todo{comment on 2D partitioning well partitioned/rmat}
 
 \subsection{Accuracy of performance models}
@@ -799,18 +806,6 @@ algorithms that heavily relies on the performance of the SpMV, such as
 correct graph representation format.
 
 
-
-
-\begin{table*}
-\caption{Performance of the SVR SpMV model on RMAT matrices(on SkylakeX).}
-\label{tab:performance_table_rmat}
-\let\center\empty
-\let\endcenter\relax
-\centering
-\resizebox{.99\width}{!}{\input{table/overall_svr_model_on_rmat_info.tex}}
-\end{table*}
-
-
 \begin{table*}
 \caption{Actual Run Time of All SpMV execution.}
 \label{tab:actual_time_table}
@@ -821,14 +816,30 @@ correct graph representation format.
 \end{table*}
 
 \begin{table*}
+\caption{Actual Run Time of All SpMV execution on R-MAT graph.}
+\label{tab:rmat-actual_time_table}
+\let\center\empty
+\let\endcenter\relax
+\centering
+\resizebox{.88\width}{!}{\input{table/rmat_total_actual_time_info.tex}}
+\end{table*}
+
+\begin{table*}
 \caption{All SpMV prediction model performance.}
 \label{tab:performance_table}
 \let\center\empty
 \let\endcenter\relax
 \centering
 \resizebox{.58\width}{!}{\input{table/total_error_info.tex}}
+\end{table*}
 
-
+\begin{table*}
+\caption{Performance of the SVR SpMV model on RMAT matrices(on SkylakeX).}
+\label{tab:performance_table_rmat}
+\let\center\empty
+\let\endcenter\relax
+\centering
+\resizebox{.99\width}{!}{\input{table/overall_svr_model_on_rmat_info.tex}}
 \end{table*}
 
 
