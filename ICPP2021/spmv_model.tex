@@ -751,10 +751,39 @@ very different way depending on the configuration of the system. The
 2D partitioning also uses collective but in smaller communicators
 which makes them easier to model.
 
-\todo{RMAT discussions}
+\todo{RMAT description}
+
 
 \section{Discussion}
 
+The micro-benchmarking based model and the SVR model are accurate
+enough to predict the correct configuration of the system for a
+particular matrix.
+
+We believe there is more potential in the fine modeling of performance
+of the micro-benchmark based model over the SVR model. The SVR model
+is fairly expensive to train. It requires to build a different model
+of the problem for each hardware configuration. The trained model is
+different or 256 MPI processes than it is 225 processes. That means
+each new hardware configuration needs to reexecute SpMV for all the
+training matrices across all execution configuration. This is not a
+scalable way to predict performance.
+
+On the other hand, the micro-benchmark based model only requires to
+run classical benchmark for the platform which are not specific to
+SpMV. In other words, the cost of this model does not scale with the
+number of hardware configuration or execution algorithms for SpMV.
+
+Also, the SVR based model is hard to interpret. Once the model is
+trained, even if it is accurate, the only thing we get is a third
+degree polynomial. One can not easily pinpoint from the model why the
+execution get the time it gets.
+
+However, the finer model based on micro-benchmarks provides a direct
+explanation of the runtime of the algorithm. One can easily understand
+from the model how the runtime is formed. This can tell us for a
+particular matrix whether the bottleneck is in the memory subsystem,
+or in the MPI communication. This type of model is easier to explain.
 
 
 
