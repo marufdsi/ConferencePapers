@@ -791,7 +791,8 @@ R-MAT performance.
 
 The micro-benchmarking based model and the SVR model are accurate
 enough to predict the correct configuration of the system for a
-particular matrix.
+particular matrix in most cases. When an error occurs, the loss of
+performance for not picking the right model is usually under 10\%.
 
 We believe there is more potential in the fine modeling of performance
 of the micro-benchmark based model over the SVR model. The SVR model
@@ -799,7 +800,7 @@ is fairly expensive to train. It requires to build a different model
 of the problem for each hardware configuration. The trained model is
 different or 256 MPI processes than it is 225 processes. That means
 each new hardware configuration needs to reexecute SpMV for all the
-training matrices across all execution configuration. This is not a
+training matrices across all execution configurations. This is not a
 scalable way to predict performance.
 
 On the other hand, the micro-benchmark based model only requires to
