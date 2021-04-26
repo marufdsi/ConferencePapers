@@ -218,7 +218,7 @@ non-zeros with indices between $rowA[r]$ and $rowA[r+1]$. Each
 non-zero $j$ is located in column $colA[j]$ and is of value
 $valA[j]$. And the algorithm executes $y[r] += x[colA[j]]*valA[j]$.
 
-\subsubsection{Coordinate  (COO)}
+\subsubsection{Coordinate (COO)}
 
 The COO format is a simpler format. The non zeros do not have to be
 listed in the order of the matrix, but they rather can be listed in
@@ -227,7 +227,8 @@ continously. To make this possible, the \texttt{rowA} array is not of
 size $n+1$ but is of size $nnz$.
 
 
-\subsection{Distributed memory exection}
+
+\subsection{Distributed Memory Execution}
 
 
 \subsubsection{2D-Uniform partitioning}
