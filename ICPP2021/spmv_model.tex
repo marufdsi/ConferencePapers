@@ -133,13 +133,13 @@ performance of different configurations. We consider two classic
 representation of sparse matrices, namely CSR and COO
 representations. And we consider three distributed memory execution
 model: 1D partitioning with global communication, and with custom
-communications, and 2d partitioning with collective communications.
+communications, and 2d partitioning with collective communications. We detail the execution of SpMV that we consider in Section~\ref{sec:spmv}.
 
 We adapt existing linear and polynomial \textit{Support Vector
   Regression}(\textit{SVR})~\cite{awad2015support} model first
 proposed for GPUs to predict and analyze the run time of \textit{SpMV}
 on distributed memory system. We also propose a model built from the
-ground up from micro-benchmarks of the architectures.
+ground up from micro-benchmarks of the architectures. The details of these models are given in Section~\ref{sec:perfmodel}.
 
 We test the quality of the models of the execution of SpMV of seven
 real world matrices and of randomly generated matrices on MPI clusters
@@ -148,12 +148,15 @@ configuration of the execution of SpMV depend on the matrix. The
 performance models usually have less than 10\% error in the predicted
 runtime. That runtime prediction accuracy is enough to predict
 accurately the configuration will lead to the best performance in most
-cases.
+cases.The experiment settings and results are detailled in
+Sections~\ref{sec:settings} and~\ref{sec:results}.
+
 
 We conclude by discussing the applicability of the different models in
-practice.
+practice in Section~\ref{sec:discussion}.
 
 \section{Sparse Matrix Vector Multiplication}
+\label{sec:spmv}
 
 \subsection{Representation formats}
 
@@ -335,6 +338,8 @@ model for the GPU.
 
 
 \section{Performance Model}
+\label{sec:perfmodel}
+
 We build up three different SpMV models and investigate their performance on different algorithms and
 storage formats.
 \begin{enumerate}
@@ -659,6 +664,8 @@ instructions, memory, and MPI communication are added together.
 
 
 \section{Experimental Settings}
+\label{sec:settings}
+
 \subsection{Hardware Platform and Operating System}
 All the nodes of the computing cluster come with Intel Xeon Gold
 6154 processors (SkylakeX architecture) and 388GB of DDR4
@@ -698,7 +705,7 @@ $a=0.33$, $b=0.33$ and $c=0.33$. In the name of the matrix the first
 numerical value in the name represent the total number of edges and
 the second value represent the number of rows.
 
-\subsection{Results}
+\subsection{Metrics}
 
 We will resent two types of results, runtimes on particular matrices
 and number of MPI processes for a particular execution mode of
@@ -710,6 +717,7 @@ error =\ \frac{actual\ time - predicted\ time}{actual\ time}\times 100
 \todo{I suppose there should be a absolute value here?}
 
 \section{Experimental Results}
+\label{sec:results}
 
 \subsection{Runtime of SpMV}
 
@@ -805,6 +813,7 @@ R-MAT SpMV performance.
 
 
 \section{Discussion}
+\label{sec:discussion}
 
 The micro-benchmarking based model and the SVR model are accurate
 enough to predict the correct configuration of the system for a
