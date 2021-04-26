@@ -494,7 +494,7 @@ separated the \textit{core calculation} into,
 
 
 \paragraph{Micro Benchmark for \textit{FMA}}
-The throughput of SkylakeX is 2 instructions per cycle and the latency of FMA is 4 cycles. So there is a potential 
+The machines we will used are based on the SkylakeX architecture. The throughput of SkylakeX is 2 instructions per cycle and the latency of FMA is 4 cycles. So there is a potential 
 of pipelinling($2\times 4 = 8$) to get the optimal results. Now, SkylakeX 
 has 512-bit register that can give the ability of the vectorization. For 64-bits floating point operation it can give vector 
 width 8 and for 32-bits it can give at max vector width 16. To find the peak performance of the FMA and to avoid the 
@@ -873,7 +873,7 @@ correct graph representation format.
 \end{table*}
 
 \begin{table*}
-\caption{Performance of the SVR SpMV model on RMAT matrices(on SkylakeX).\todo{columns should be ordered like in the previous tables. Any chance we will get the models for linear and benchmark based?}}
+\caption{Performance of the SVR SpMV model on RMAT matrices.\todo{columns should be ordered like in the previous tables. Any chance we will get the models for linear and benchmark based?}}
 \label{tab:performance_table_rmat}
 \let\center\empty
 \let\endcenter\relax
