@@ -175,7 +175,7 @@ arrays: \texttt{rowA}, \texttt{colA}, and
 its CSR representation.
 
 \begin{figure}
-  \begin{subfigure}[b]{.4\linewidth}
+  \begin{subfigure}[b]{.3\linewidth}
     $\begin{pmatrix}
       1 & 2 & 3 & 0 & 0 \\
       0 & 0 & 4 & 5 & 6 \\
@@ -187,7 +187,7 @@ its CSR representation.
     \caption{A matrix}
   \end{subfigure}
   %
-  \begin{subfigure}[b]{.5\linewidth}
+  \begin{subfigure}[b]{.6\linewidth}
     rowA = [ 0, 3, 6, 7, 9, 11 ] 
     
     colA = [ 0, 1, 2, 2, 3, 4, 1, 0, 4, 2, 3 ] 
@@ -196,8 +196,8 @@ its CSR representation.
 
     \caption{CSR Representation}
   \end{subfigure}
-
-  \caption{Matrix representation}
+  
+  \caption{Matrix representation format}
   \label{fig:matrepcsr}
 \end{figure}
 
@@ -220,7 +220,11 @@ $valA[j]$. And the algorithm executes $y[r] += x[colA[j]]*valA[j]$.
 
 \subsubsection{Coordinate  (COO)}
 
-
+The COO format is a simpler format. The non zeros do not have to be
+listed in the order of the matrix, but they rather can be listed in
+any order. As such, the non zeros of a row do not have to be listed
+continously. To make this possible, the \texttt{rowA} array is not of
+size $n+1$ but is of size $nnz$.
 
 
 \subsection{Distributed memory exection}
