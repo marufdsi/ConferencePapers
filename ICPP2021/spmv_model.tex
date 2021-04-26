@@ -801,8 +801,13 @@ algorithms can configure very differently way depending on the system
 state. The 2D partitioning also uses collective but in smaller
 communicators which makes them easier to model.
 
-The SVR model provides acceptable accuracy in its prediction of the
-R-MAT SpMV performance.
+
+The accuracy on R-MAT matrices are given in
+Table~\ref{tab:performance_table_rmat}.  The SVR model provides good
+accuracy in its prediction of the R-MAT SpMV performance with
+geometric means ranging from 3\% to 9\%. The accuracy of the
+microbenchmark based model is not does not perform as well, ranging
+from 9\% to 17\% and reaching 50\% on the COO L1DR.
 
 \todo{accuracy of micro benchmark based model on R-MAT}
 
