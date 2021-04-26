@@ -818,12 +818,12 @@ microbenchmark based model does not perform as well, ranging
 from 9\% to 17\% and reaching 50\% on the COO L1DR.
 
 The average error of the linear model for the R-MAT data is around
-32\%. The main reason behind this this error is the density of the
+32\%. The main reason behind this error is the density of the
 matrices. As we can see All R-MAT matrices are highly dense compare to
-the real-world test matrices. We build up our matrices by varying
-non-zero per row by the multiply of $2(1,2,4, 8, 16, 32, 64, 128$, so
-when the test cases are more dense the angle between two candidate row
-for the linear model become large.
+the real-world test matrices. When the non-zero per row increases, the angle 
+between two candidate rows for the model is becoming very large.  
+That leads to a higher error of the model, which means the linear model 
+is more suitable for the highly sparse matrices.
 
 
 
