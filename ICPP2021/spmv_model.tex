@@ -235,9 +235,7 @@ any order. As such, the non zeros of a row do not have to be listed
 continously. To make this possible, the \texttt{rowA} array is not of
 size $n+1$ but is of size $nnz$.
 
-Computing $y = A x$ when $A$ is encoded as in COO format simply
-consist in executing for every nonzero $j$: $y[rowA[j]] +=
-x[colA[j]] * valA[j]$.
+
 
 \subsection{Distributed Memory Execution}
 
@@ -662,9 +660,6 @@ instructions, memory, and MPI communication are added together.
 \end{figure}
 
 
-
-
-
 \section{Experimental Settings}
 \label{sec:settings}
 
@@ -713,10 +708,10 @@ We will resent two types of results, runtimes on particular matrices
 and number of MPI processes for a particular execution mode of
 SpMV. We will also present relative errors for models calculated by:
 \begin{eqnarray*}
-error =\ \frac{actual\ time - predicted\ time}{actual\ time}\times 100
+error =\ \frac{|actual\ time - predicted\ time|}{actual\ time}\times 100
 \end{eqnarray*}
 
-\todo{I suppose there should be a absolute value here?}
+%\todo{I suppose there should be a absolute value here?}
 
 \section{Experimental Results}
 \label{sec:results}
