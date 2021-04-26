@@ -702,6 +702,19 @@ Looking first at the different 1D partitioning results. We can see
 that having dedicated communication patterns to only access typically
 delivers better performance than obtaining the complete.
 
+The matrices in the testing set are mostly well partitionable. That
+means that once partitione each node will not need many external
+values of the x vector to perform the multiplication. Because of that,
+the local variant of 1D partitioning which does custom messages is
+particularly effective becasue it minimizes the total amount of value
+exchange communications. The global variant uses MPI efficient
+collective but communicates the entire vector to each node which is
+more costly overall.
+
+\todo{comment on RMAT 1d global VS 1d local}
+
+\todo{comment on 2D partitioning well partitioned/rmat}
+
 \subsection{Accuracy of performance models}
 
 
