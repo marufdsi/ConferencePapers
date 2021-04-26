@@ -103,7 +103,7 @@ scientific applications~\cite{gleich2015pagerank, saad2003iterative,
 age with the popularization of departmental clusters to support these
 scientific and engineering applications.  Many different approaches
 have been proposed to improve \textit{SpMV}. Just considering single
-node efforts leads to stream of storage formats~\cite{ashari2014fast, ashari2014efficient, baskaran2009optimizing, bell2009implementing, buluc2011reduced, bulucc2009parallel, choi2010model, deng2009taming, garland2008sparse, greathouse2014efficient, kourtis2010exploiting, li2013smat, li2013gpu, liu2013efficient, su2012clspmv, tang2015optimizing, vuduc2005oski, williams2007optimization, yan2014yaspmv} and optimizations. 
+node efforts leads to stream of storage formats~\cite{almasri20, ashari2014fast, ashari2014efficient, baskaran2009optimizing, bell2009implementing, buluc2011reduced, bulucc2009parallel, choi2010model, deng2009taming, garland2008sparse, greathouse2014efficient, kourtis2010exploiting, li2013smat, li2013gpu, liu2013efficient, su2012clspmv, tang2015optimizing, vuduc2005oski, williams2007optimization, yan2014yaspmv} and optimizations. 
 %\todo{put a bunch of storage format papers}
 \\
 To perform sparse matrix-vector multiplication(\textit{SpMV}) on
@@ -157,11 +157,16 @@ practice.
 
 \subsection{Representation formats}
 
-There are many representation format designed to store sparse matrices
-for computing SpMV. While some representation format have been
-designed especially to optimze SpMV. CSR and COO are generic storage
-format that are used in most sparse linear algebra and graph
-processing.
+There are many representation formats designed to store sparse
+matrices. While some representation format have been designed
+especially to optimze SpMV~\cite{almasri20, ashari2014fast,
+  ashari2014efficient, baskaran2009optimizing, bell2009implementing,
+  buluc2011reduced, bulucc2009parallel, choi2010model, deng2009taming,
+  garland2008sparse, greathouse2014efficient, kourtis2010exploiting,
+  li2013smat, li2013gpu, liu2013efficient, su2012clspmv,
+  tang2015optimizing, vuduc2005oski, williams2007optimization,
+  yan2014yaspmv}, CSR and COO are generic storage format that are used
+in most sparse linear algebra and graph processing.
 
 All the encoding of sparse matrices essentially aim at avoiding to
 represent the zeros in matrices and only represent the non-zero values

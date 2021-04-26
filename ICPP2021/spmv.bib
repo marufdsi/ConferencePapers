@@ -528,3 +528,17 @@ articleno = {1},
 numpages = {25},
 keywords = {multilevel algorithms, performance evaluation, sparse matrices, Graph drawing}
 }
+
+@article{Almasri20,
+title = {CCF: An efficient SpMV storage format for AVX512 platforms},
+journal = {Parallel Computing},
+volume = {100},
+pages = {102710},
+year = {2020},
+issn = {0167-8191},
+doi = {https://doi.org/10.1016/j.parco.2020.102710},
+url = {https://www.sciencedirect.com/science/article/pii/S0167819120300958},
+author = {Mohammad Almasri and Walid Abu-Sufah},
+keywords = {MKL Inspector–executor, SpMV, Xeon Skylake, AVX512, SIMD efficiency, Load balancing, Data locality},
+abstract = {We present a sparse matrix vector multiplication (SpMV) kernel that uses a novel sparse matrix storage format and delivers superior performance for unstructured matrices on Intel x86 processors. Our kernel exploits the properties of our storage format to enhance load balancing, SIMD efficiency, and data locality. We evaluate the performance of our kernel on a dual 24-core Skylake Xeon Platinum 8160 using 82 HPC and 36 scale-free unstructured matrices from 42 application areas. For HPC matrices, our kernel achieves a speed improvement of up to 19.5x over MKL Inspector–executor SpMV kernel (1.6x on average). For scale-free matrices, the speed improvement is up to 2.6x (1.3x on average).}
+}
